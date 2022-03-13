@@ -1,17 +1,13 @@
 {
-    "manifest_version": 3,
-    "name": "Plinq Importer",
-    "version": "1.0.0",
-    "action": {
-        "default_popup": "popup.html"
-    },
-    "description": "Import contacts from LinkedIn",
-    "permissions": ["tabs", "activeTab", "scripting"],
-    "host_permissions": [
-        "https://linkedin.com/"
-    ],
-    "background.service_worker": {
-        "scripts": ["collectContacts.js"],
-        "persistent": false
-    }
+  "name": "Getting Started Example",
+  "description": "Build an Extension!",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "action": {
+    "default_popup": "popup.html"
+  }
 }
