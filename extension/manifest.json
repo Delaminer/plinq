@@ -6,8 +6,8 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "webRequest", "*://*.linkedin.com/"],
   "action": {
     "default_popup": "popup.html"
   }
-}
+} 
