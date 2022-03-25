@@ -1,58 +1,41 @@
 import { useState } from 'react'
 
-export default function AddContactForm(props) {
-  const [firstName, setFirstName] = useState('First Name');
-  const [lastName, setLastName] = useState('Last Name');
-  const [email, setEmail] = useState('test@google.com');
+export default function AddContactForm({ onSubmit, close }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   return (
     <form>
-      <label htmlFor="firstName">First name:</label>
-      <input type="text" id="firstName" name="firstName"
-        value={firstName}
-        onChange={e => setFirstName(e.target.value)}
-      />
-
-      <label htmlFor="lastName">Last name:</label>
-      <input type="text" id="lastName" name="lastName"
-        value={lastName}
-        onChange={e => setLastName(e.target.value)}
+      <label htmlFor="name">First name:</label>
+      <input type="text" id="name" name="name"
+      placeholder='Name'
+        value={name}
+        onChange={e => setName(e.target.value)}
       />
 
       <label htmlFor="email">Last name:</label>
       <input type="text" id="email" name="email"
+      placeholder='email@email.com'
         value={email}
         onChange={e => setEmail(e.target.value)}
       />
 
       <input
         type="submit"
-        value="Add COntact!"
+        value="Add Contact!"
         onClick={event => {
 
-          event.preventDefault();
+          event.preventDefault(); // so the page does not reload
           let contact = {
-            firstName: firstName,
-            lastName: lastName,
-            name: `${firstName} ${lastName}`,
+            name: name,
             email: email,
           };
 
-          let contacts = localStorage.getItem('contacts')
-          if (contacts == null) contacts = '[]';
-          contacts = new Array(JSON.parse(contacts));
-          contacts.push(contact);
-          localStorage.setItem('contacts', JSON.stringify(contact));
-
-          // chrome.storage.sync.get('plinq', ({ 'plinq': data }) => {
-          //   console.log('Got back data', data);
-          //   // data.contacts.push(contact);
-          //   // chrome.storage.sync.set({ 'plinq': data });
-          // });
-
-          // props.closeForm();
+          onSubmit(contact);
         }}
       />
+
+      <button onClick={close}>Cancel</button>
     </form>
   );
 };

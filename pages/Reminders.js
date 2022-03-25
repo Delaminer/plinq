@@ -1,22 +1,12 @@
-export default function Reminders({ storage }) {
-  let contacts = storage.getItem('contacts')
-  console.log(contacts)
-  if (contacts == null) {
-    contacts = '[]';
-    storage.setItem('contacts', contacts);
-  }
-  console.log(contacts)
-  contacts = new Array(JSON.parse(contacts));
-  contacts = contacts.map(contact => (
-    <div key={contact.name}>
-      <p>{contact.name}</p>
-      <p>{contact.email}</p>
-    </div>
-  ))
-
+export default function Reminders({ contacts }) {
   return (
     <>
-      {contacts}
+      {contacts.map(contact => (
+        <div key={contact.name} className='contact-card'>
+          <p key='name'>{contact.name}</p>
+          <p key='email'>{contact.email}</p>
+        </div>
+      ))}
     </>
   );
 };
