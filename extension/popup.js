@@ -1,6 +1,6 @@
 // Goto Main button: Open up the application page (HTML) for Plinq
 document.querySelector('#goto-main').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'app.html' });
+  chrome.tabs.create({ url: 'Templates.html' });
 });
 
 // Save this User button: Quickly grab info and save it
