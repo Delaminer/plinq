@@ -3,11 +3,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build-ext": "esbuild extension/sidebar.jsx --bundle --outfile=extension/sidebar.js --minify --sourcemap --target=chrome58,firefox57,safari11,edge16"
   },
   "dependencies": {
     "next": "latest",
     "react": "17.0.2",
     "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.27"
   }
 }

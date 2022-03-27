@@ -33,15 +33,20 @@ document.querySelector('#goto-linkedin').addEventListener('click', () => {
 });
 
 document.querySelector('#load-users').addEventListener('click', async () => {
-
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: handleLinkedInPageList,
+  chrome.storage.local.set({'liImporting': true});
+  let tab = await chrome.tabs.create({
+    active: true,
+    url: 'https://www.linkedin.com/mynetwork/invite-connect/connections/'
   });
+  // let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-})
+  // chrome.scripting.executeScript({
+  //   target: { tabId: tab.id },
+  //   files: ['sidebar.js']
+  //   // function: handleLinkedInPage,
+  // });
+  // setupRequestIntercept(tab);
+});
 
 const handleEntry = entry => {
   chrome.tabs.create({
@@ -59,7 +64,15 @@ const handleLinkedInPageUser = () => {
     return { email: mailLink == null ? null : mailLink.href.slice(7) };
   }
 
-
+  // Import flow
+  // 1. Initiate LinkedIn import (Import from LinkedIn)
+  // 2. Open tab with known ID with list of connections
+  // 3. Inject script to open sidebar
+  // 4. Background script receives intercepted csrf token and sends it to the sidebar
+  // 5. Sidebar asks for list of all connections and populates multiselect list
+  // 6. User selects connections to import
+  // 7. Sidebar uses internal API to ask for connections' information
+  // 8. Sidebar sends message (?) to background script to store connections' information
 }
 
 const handleLinkedInPageList = () => {
@@ -125,14 +138,45 @@ class LinkedInApi {
   }
 }
 
-function setupRequestIntercept() {
-  chrome.webRequest.onSendHeaders.addListener(function (details) {
+function setupRequestIntercept(tabId) {
+  const listener = chrome.webRequest.onSendHeaders.addListener(function (details) {
     const header = details.requestHeaders.filter(i => i.name === 'csrf-token')[0];
     if (header !== undefined) {
       console.log('the csrf token is ' + header.value);
+      chrome.storage.local.set({csrf: header.value});
+      chrome.tabs.sendMessage(tabId, {csrf: header.value});
+      chrome.webRequest.onSendHeaders.removeListener(listener);
     } else {
       console.info('no header entry with csrf-token');
     }
   }, { urls: ["<all_urls>"] }, ["requestHeaders"]);
 }
-setupRequestIntercept();
+
+const handleLinkedInPage = () => {
+  const links = Array.from(
+    document.querySelectorAll(".mn-connection-card__link"),
+  );
+  const entries = links.map((link) => ({
+    name: link.querySelector(".mn-connection-card__name").innerText,
+    occupation: link.querySelector(".mn-connection-card__occupation").innerText,
+    link: link.href,
+  })).slice(0, 3);
+  // entries = entries.slice(0, 3);
+  console.log(entries); // debug
+
+  chrome.runtime.onMessage.addListener((req, sender, res) => {
+    console.log({req, sender, res});
+  });
+  // // Go to each page
+  // entries.forEach((entry, i) => {
+  //   let windowRef = window.open(entry.link, "_blank");
+  //   setTimeout(() => {
+  //     alert(
+  //       windowRef.document.querySelector("#top-card-text-details-contact-info")
+  //         .textContent,
+  //     );
+  //   }, 2000);
+  //   // This page has
+  //   // https://www.linkedin.com/in/simarpreet-singh-84a599190/overlay/contact-info/
+  // });
+};

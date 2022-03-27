@@ -6,6 +6,13 @@
   "background": {
     "service_worker": "background.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://*.linkedin.com/*"],
+      "css": [],
+      "js": ["liContent.js"]
+    }
+  ],
   "permissions": ["storage", "activeTab", "scripting", "tabs", "webRequest", "*://*.linkedin.com/"],
   "action": {
     "default_popup": "popup.html"
