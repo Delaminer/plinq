@@ -1,7 +1,16 @@
-// Goto Main button: Open up the application page (HTML) for Plinq
-document.querySelector('#goto-main').addEventListener('click', () => {
-  chrome.tabs.create({ url: 'app.html' });
-});
+// Simple helper function for allowing buttons of a given id go to a requested page
+const setupLink = (elementId, url) => {
+  document.querySelector(`#${elementId}`).addEventListener('click', () => {
+    chrome.tabs.create({ url });
+    
+  });
+  
+}
+
+// These buttons pull up each of the main pages
+setupLink('goto-reminders', 'Reminders.html');
+setupLink('goto-networks', 'Networks.html');
+setupLink('goto-templates', 'Templates.html');
 
 // Save this User button: Quickly grab info and save it
 document.querySelector('#save-user').addEventListener('click', async () => {

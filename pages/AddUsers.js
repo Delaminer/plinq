@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import AddContactForm from './AddContactForm'
 import Reminders from './Reminders'
 
-export default function Home() {
+export default function AddUsers() {
   const [editing, setEditState] = useState(false);
   const [contacts, setContacts] = useState([]);
 
