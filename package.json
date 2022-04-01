@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && next export",
-    "start": "next start"
+    "start": "next start",
+    "setup-extension": "rm -rf extension_out && cp -r extension extension_out && cp -r out extension_out"
   },
   "dependencies": {
     "next": "latest",
