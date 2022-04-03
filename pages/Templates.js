@@ -1,7 +1,3 @@
 export default function Templates() {
-    return (
-        <p>
-            Templates!
-        </p>
-    );
-};
+  return <p>Templates!</p>;
+}
