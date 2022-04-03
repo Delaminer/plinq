@@ -2,8 +2,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
-    "start": "next start"
+    "next-build": "next build && next export",
+    "start": "next start",
+    "build-clear": "rm -rf extension_out",
+    "build-copy": "cp -r extension extension_out",
+    "build-copy2": "cp -r out/. extension_out/",
+    "build-rename": "grep -rl '\/_next' extension_out | xargs sed -i 's|/_next|/next|g'",
+    "build-rename2": "mv extension_out/_next extension_out/next",
+    "build-complete": "rm -rf extension_out && cp -r extension extension_out && cp -r out/. extension_out/ && grep -rl '\/_next' extension_out | xargs sed -i 's|/_next|/next|g'",
+    "build": "npm run next-build && npm run build-clear && npm run build-copy && npm run build-copy2 && npm run build-rename && npm run build-complete && npm run build-rename2",
+    "build-fast": "npm run build-clear && npm run build-copy && npm run build-copy2 && npm run build-rename && npm run build-complete && npm run build-rename2"
   },
   "dependencies": {
     "next": "latest",
