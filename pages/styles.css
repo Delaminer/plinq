@@ -1,0 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+* {
+    font-family: 'Montserrat';
+}
+
+.base {
+    padding: 50px;
+}
+
+nav a {
+    color: black;
+    text-decoration: none;
+    padding: 50px;
+    font-weight: 500;
+}
+nav a.active {
+    font-weight: 700;
+}
+
+
+.contact-card {
+    display: inline-block;
+    /* background-color: aqua; */
+    /* border: solid thin blue; */
+    width: 300px;
+    height: 250px;
+    background: #EEEEEE;
+
+    margin: 10px;
+    margin-left: 0px;
+    padding: 10px;
+}
+
+.contact-card .name {
+    /* position: absolute; */
+    /* width: 74px; */
+    height: 29px;
+    /* left: 212px; */
+    /* top: 256px; */
+    
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    /* line-height: 29px; */
+    /* display: flex; */
+    /* align-items: center; */
+    /* letter-spacing: -0.015em; */
+    
+    color: #000000;
+}
+
+.contact-card .email {
+    
+    
+/* position: absolute; */
+width: 142px;
+height: 20px;
+/* left: 124px; */
+/* top: 349px; */
+
+font-family: 'Montserrat';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 20px;
+/* identical to box height */
+
+display: flex;
+align-items: center;
+letter-spacing: -0.015em;
+
+color: #000000;
+}
+
+.contact-card button.followup {
+    display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 10px 16px;
+
+/* position: absolute; */
+width: 112px;
+height: 40px;
+/* left: 379px; */
+/* top: 461px; */
+
+}
+
+button, input {
+    border: none;
+    background: #CCCCCC;
+}
+button:hover {
+    background: #AAAAAA;
+}
+
+.lower {
+    position: absolute;
+    /* left: 0; */
+    /* right: 0; */
+    width: 1920px;
+    background-color: red;
+    bottom: 0;
+}
+
+.networks .top-bar {
+    /* background-color: blue; */
+    /* white-space: nowrap; */
+    /* display: flex; */
+    width: 100%;
+    display: inline-block;
+    align-items: baseline;
+}
+
+.networks .top-bar * {
+    display: inline-block;
+}
+
+.networks .search {
+    float: right;
+    /* background-color: green; */
+}
+
+.networks .top-bar .add {
+    /* vertical-align: middle; */
+    display: inline-block;
+    /* float: left; */
+}
+
+.networks .top-bar .network-count,
+.networks .top-bar .sort-order,
+.networks .top-bar .search-field {
+    /* vertical-align: middle; */
+    display: inline-block;
+    padding: 0;
+    margin: 0 20px;
+    /* float: right; */
+    /* background-color: red; */
+}
+
+.networks .top-bar .search-field {
+    /* background: #CCCCCC; */
+    width: 560px;
+    height: 37px;
+    padding-left: 24px;
+}
+
+.networks .top-bar .search-field button {
+    text-indent: -999px;
+    overflow: hidden;
+    width: 40px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: inherit;
+    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E%3C/svg%3E") no-repeat center;
+    cursor: pointer;
+    opacity: 0.7;
+}
