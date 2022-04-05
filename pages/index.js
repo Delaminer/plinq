@@ -59,6 +59,9 @@ export default function Home() {
 
   return (
     <main>
+      <div className="pl-24">
+        <img src="/logo.svg" className="pt-2.5"></img>
+      </div>
       <BrowserRouter>
         <nav className="m-12">
           <NavItem to="reminders">Reminders</NavItem>
