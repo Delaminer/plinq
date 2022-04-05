@@ -5,9 +5,9 @@ import {
   NavLink,
   Redirect,
 } from "react-router-dom";
-import Reminders from "./Reminders";
-import Networks from "./Networks";
-import Templates from "./Templates";
+import Reminders from "./pages/Reminders";
+import Networks from "./pages/Networks";
+import Templates from "./pages/Templates";
 import { useState } from "react";
 
 const defaultData = {
@@ -40,33 +40,39 @@ const Base = () => (
   </>
 );
 
+const NavItem = ({ to, children }) => {
+  return (
+    <NavLink
+      className={(isActive) =>
+        "text-xl p-12" + (isActive ? " font-bold text-purple-7" : "font-normal")
+      }
+      to={to}
+    >
+      {children}
+    </NavLink>
+  );
+};
+
 export default function Page() {
   const [state, setState] = useState(defaultData);
 
   return (
     <main>
       <BrowserRouter>
-        <nav>
-          <NavLink activeClassName="active" to="/reminders">
-            Reminders
-          </NavLink>
-          <NavLink activeClassName="active" to="/networks">
-            Networks
-          </NavLink>
-          <NavLink activeClassName="active" to="/templates">
-            Templates
-          </NavLink>
+        <nav className="m-12">
+          <NavItem to="reminders">Reminders</NavItem>
+          <NavItem to="networks">Networks</NavItem>
+          <NavItem to="templates">Templates</NavItem>
         </nav>
-        <div className="lower">Test</div>
         <div className="base">
           <Routes>
             <Route path="/" element={<Base />}></Route>
             <Route
-              path="/reminders"
+              path="reminders"
               element={<Reminders contacts={state.contacts} />}
             ></Route>
             <Route
-              path="/networks"
+              path="networks"
               element={
                 <Networks
                   contacts={state.contacts}
@@ -74,7 +80,7 @@ export default function Page() {
                 />
               }
             ></Route>
-            <Route path="/templates" element={<Templates />}></Route>
+            <Route path="templates" element={<Templates />}></Route>
           </Routes>
         </div>
       </BrowserRouter>

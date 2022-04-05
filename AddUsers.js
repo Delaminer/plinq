@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import AddContactForm from "./AddContactForm";
-import Reminders from "./Reminders";
+import Reminders from "./pages/Reminders";
 
 export default function AddUsers() {
   const [editing, setEditState] = useState(false);

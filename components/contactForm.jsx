@@ -4,7 +4,7 @@ export default function ContactForm({ onSubmit, close }) {
   const { register, handleSubmit } = useForm();
 
   return (
-    <div className="background">
+    <div className="bg-white w-full h-full z-10">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="contact-form-container">
           <label htmlFor="firstName">First name</label>
