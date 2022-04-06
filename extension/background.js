@@ -23,4 +23,20 @@ function setupRequestIntercept() {
   }, { urls: [/*"*://*.linkedin.com/*"*/ "<all_urls>"] }, ["requestHeaders"]);
 }
 
-setupRequestIntercept();
+// setupRequestIntercept();
+
+chrome.runtime.onMessage.addListener((msg, sender, respond) => {
+  console.info('got message', msg);
+  if (msg.module === 'liImport' && msg.topic === 'enabled?') {
+    async function res() {
+      const enabled = (await chrome.storage.sync.get('liImporting')).liImporting;
+      if (enabled) {
+        await chrome.storage.sync.set({liImporting: false});
+      }
+      respond({value: enabled});
+      console.info('responded with', {value:enabled});
+    }
+    res();
+    return true;
+  }
+});

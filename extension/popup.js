@@ -33,7 +33,7 @@ document.querySelector('#goto-linkedin').addEventListener('click', () => {
 });
 
 document.querySelector('#load-users').addEventListener('click', async () => {
-  chrome.storage.local.set({'liImporting': true});
+  await chrome.storage.sync.set({'liImporting': true});
   let tab = await chrome.tabs.create({
     active: true,
     url: 'https://www.linkedin.com/mynetwork/invite-connect/connections/'
