@@ -14,6 +14,8 @@ const defaultData = {
   contacts: [
     {
       name: "Bob Smith",
+      job: "Product Designer",
+      company: "LINK",
       email: "bob@bobville.com",
       lastContact: "February 26, 2022 00:00:00",
       nextContact: "April 1, 2022 00:00:00",
