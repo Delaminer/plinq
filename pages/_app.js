@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Page from './Page';
-import './styles.css'
+import './styles.css';
+import './templates.css';
 
 export default function MyApp({ Component, pageProps }) {
   return (
