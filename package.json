@@ -11,7 +11,8 @@
     "build-rename2": "mv extension_out/_next extension_out/next",
     "build-complete": "rm -rf extension_out && cp -r extension extension_out && cp -r out/. extension_out/ && grep -rl '/_next' extension_out | xargs sed -i 's|/_next|/next|g'",
     "build": "npm run next-build && npm run build-clear && npm run build-copy && npm run build-copy2 && npm run build-rename && npm run build-complete && npm run build-rename2",
-    "build-fast": "npm run build-clear && npm run build-copy && npm run build-copy2 && npm run build-rename && npm run build-complete && npm run build-rename2"
+    "build-fast": "npm run build-clear && npm run build-copy && npm run build-copy2 && npm run build-rename && npm run build-complete && npm run build-rename2",
+    "build-ext": "esbuild extension/sidebar.jsx --bundle --outfile=extension/sidebar.js --minify --sourcemap --target=chrome58,firefox57,safari11,edge16"
   },
   "dependencies": {
     "next": "latest",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.23"
+    "tailwindcss": "^3.0.23",
+    "esbuild": "^0.14.27"
   }
 }
