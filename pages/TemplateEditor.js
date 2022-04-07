@@ -1,18 +1,18 @@
 export default function TemplateEditor({ template }) {
     return (
-        <div className='template-editor'>
-            <div className='top-bar'>
+        <div className="w-96 h-80 bg-purple-7 ml-0 m-2.5 rounded-2xl shadow-md absolute z-30 top-0">
+            <div className="top-bar">
                 <span>{template.name}</span>
             </div>
-            <div className='subject'>
-                <label for='subject'>Subject</label>
-                <input id='subject' value={template.subject}></input>
+            <div className="subject">
+                <label for="subject">Subject</label>
+                <input id="subject" value={template.subject}></input>
             </div>
-            <div className='content'>
-                <label for='content'>Content</label>
-                <input id='content' value={template.content}></input>
+            <div className="content">
+                <label for="content">Content</label>
+                <input id="content" value={template.content}></input>
             </div>
-            <div className='controls'>
+            <div className="controls">
                 <button>DELETE</button>
                 <button>EDIT</button>
             </div>

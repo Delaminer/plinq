@@ -33,6 +33,20 @@ const defaultData = {
       nextContact: "April 5, 2022 00:00:00",
     },
   ],
+  templates: [
+    {
+        name: 'Cold Email',
+        type: 'INTRO',
+        subject: 'Reaching out to you',
+        content: 'Hi recruiter how are you?',
+    },
+    {
+        name: 'Career Fair follow-up',
+        type: 'FOLLOW-UP',
+        subject: 'Following up from the career fair!',
+        content: 'I enjoyed talking with you today at the career fair!',
+    },
+],
 };
 
 const Base = () => (
@@ -86,7 +100,7 @@ export default function Home() {
                 />
               }
             ></Route>
-            <Route path="templates" element={<Templates />}></Route>
+            <Route path="templates" element={<Templates templates={state.templates}/>}></Route>
           </Routes>
         </div>
       </BrowserRouter>
