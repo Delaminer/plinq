@@ -1,35 +1,32 @@
-import Head from 'next/head'
-import { useState, useEffect } from 'react'
-import AddContactForm from './AddContactForm'
-import Reminders from './Reminders'
+import Head from "next/head";
+import { useState, useEffect } from "react";
+import AddContactForm from "./AddContactForm";
+import Reminders from "./pages/Reminders";
 
 export default function AddUsers() {
   const [editing, setEditState] = useState(false);
   const [contacts, setContacts] = useState([]);
 
-  const addContact = contact => {
+  const addContact = (contact) => {
     setContacts([...contacts, contact]);
   };
   useEffect(() => {
     // Update localStorage
-    localStorage.setItem('contacts', JSON.stringify(contacts));
+    localStorage.setItem("contacts", JSON.stringify(contacts));
   }, [contacts]);
 
   // NextJS uses server side rendering, so localStorage must be inside a useEffect hook.
   useEffect(() => {
-    let savedContacts = localStorage.getItem('contacts');
-    if (savedContacts)
-      setContacts(new Array(JSON.parse(savedContacts)));
-    else
-      localStorage.setItem('contacts', '[]');
+    let savedContacts = localStorage.getItem("contacts");
+    if (savedContacts) setContacts(new Array(JSON.parse(savedContacts)));
+    else localStorage.setItem("contacts", "[]");
   }, [setContacts]);
-  
+
   // let contacts = localStorage.getItem('contacts')
   // if (contacts == null) contacts = '[]';
   // contacts = new Array(JSON.parse(contacts));
   // contacts.push(contact);
   // localStorage.setItem('contacts', JSON.stringify(contact));
-
 
   return (
     <div className="container">
@@ -39,18 +36,16 @@ export default function AddUsers() {
       </Head>
 
       <main>
-        <h1 className="title">
-          Welcome to Plinq!
-        </h1>
+        <h1 className="title">Welcome to Plinq!</h1>
 
         {/* <img 
       src="https://media-exp1.licdn.com/dms/image/D4E03AQFaCL…eta&t=scTsf_Nn1CzG7GTZoGTGX_Lz3mpU3UNRMPvj6iP8YQ8"
       alt="new"
       /> */}
 
-        {editing ?
+        {editing ? (
           <AddContactForm
-            onSubmit={contact => {
+            onSubmit={(contact) => {
               setEditState(false);
               addContact(contact);
             }}
@@ -58,13 +53,9 @@ export default function AddUsers() {
               setEditState(false);
             }}
           />
-          :
-          <button
-            onClick={() => setEditState(true)}
-          >
-            Add a contact
-          </button>
-        }
+        ) : (
+          <button onClick={() => setEditState(true)}>Add a contact</button>
+        )}
 
         <p>Your reminders for today:</p>
         <Reminders contacts={contacts} />
@@ -74,5 +65,5 @@ export default function AddUsers() {
         </p>
       </main>
     </div>
-  )
-};
+  );
+}
