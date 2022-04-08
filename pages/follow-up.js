@@ -11,13 +11,11 @@ export default function Reminders({ contacts }) {
             <p key="name" className="font-bold">
               {contact.name}
             </p>
-            {
-              (contact.job && contact.company) && (
-                <p key="job" className="job">
-                    {contact.job} @ {contact.company}
-                </p>
-              )
-            }
+            {contact.job && contact.company && (
+              <p key="job" className="job">
+                {contact.job} @ {contact.company}
+              </p>
+            )}
             <p key="email" className="email">
               {contact.email}
             </p>
