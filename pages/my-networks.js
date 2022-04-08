@@ -1,51 +1,78 @@
 import { useState } from "react";
-import ContactCard from "../components/contactForm";
+import Image from "next/image";
+import { CgArrowsExpandRight } from "react-icons/cg";
 
 export default function Networks({ contacts, sort }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="networks">
-      <div className="flex py-9 items-center">
-        {showForm ? <ContactCard close={() => setShowForm(false)} /> : null}
+      <div className="flex py-9 items-center flex-wrap">
+        {/* {showForm ? <ContactCard close={() => setShowForm(false)} /> : null} */}
         <input
-          className="w-96 rounded-lg bg-gray-1 border border-gray-3 placeholder:text-black pl-6 box-border h-12"
+          className="w-96 rounded-lg bg-gray-1 border border-gray-3 placeholder:text-black pl-6 box-border h-12 mr-12"
           placeholder="Search"
         />
-        <select className="w-44 ml-12 bg-gray-1 pl-4 rounded-lg border border-gray-3 box-border h-12">
+        <select className="w-44 mr-6 bg-gray-1 pl-4 rounded-lg border border-gray-3 box-border h-12">
           <option value="">Sort by</option>
           <option value="name">Name</option>
           <option value="lastContact">Last Contacted</option>
         </select>
-        <select className="w-44 ml-12 bg-gray-1 pl-4 rounded-lg border border-gray-3 box-border h-12">
+        <select className="w-44 mr-12 bg-gray-1 pl-4 rounded-lg border border-gray-3 box-border h-12">
           <option value="">Industry</option>
           <option value="tech">Tech</option>
           <option value="finance">Finance</option>
         </select>
-        <div className="flex items-center justify-center ml-auto h-12 pl-3">
-          156 networks
+        <div className="flex items-center justify-center ml-auto h-12">
+          {contacts.length} networks
         </div>
         <button
-          className="ml-8 px-4 py-2 bg-purple-5 text-sm self-end rounded-lg w-32 text-white h-12"
+          className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm"
           onClick={() => setShowForm(true)}
         >
           Add
         </button>
       </div>
-      <div>
+      <div className="grid grid-cols-4 gap-5">
         {contacts.sort(sort).map((contact) => (
           <div
             key={contact.name}
-            className="inline-block w-96 h-80 bg-gray-1 ml-0 m-2.5 rounded-2xl shadow-md"
+            className="inline-block bg-white rounded-2xl shadow-md"
           >
-            <p key="name" className="name">
-              {contact.name}
-            </p>
+            <div className="flex flex-row my-4">
+              <div className="mx-6 my-3">
+                <Image
+                  src="/avatar.png"
+                  width="56px"
+                  height="56px"
+                  className="rounded-full"
+                />
+              </div>
+              <div className="flex flex-col mr-2">
+                <p key="name" className="font-bold text-2xl">
+                  {contact.name}
+                </p>
+                <p key="job" className="text-gray-4">
+                  {contact.job} @ {contact.company}
+                </p>
+                <div className="flex flex-row gap-2 mt-2">
+                  <div className="bg-purple-3/20 rounded-2xl px-3 py-1 text-purple-3 text-sm font-semibold">
+                    B2B
+                  </div>
+                  <div className="bg-orange/20 rounded-2xl px-3 py-1 text-orange text-sm font-semibold">
+                    Health
+                  </div>
+                </div>
+              </div>
+              <div className="ml-auto mr-6 mt-2">
+                <CgArrowsExpandRight />
+              </div>
+            </div>
+            <div className="bg-gray-2 h-[1px] mx-6" />
             <p key="email" className="email">
               {contact.email}
             </p>
             <p>Contact by {contact.nextContact}</p>
-            <button className="followup">Follow-Up</button>
           </div>
         ))}
       </div>

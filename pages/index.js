@@ -22,12 +22,40 @@ const defaultData = {
     },
     {
       name: "Alex Alexson",
+      job: "Product Designer",
+      company: "LINK",
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
       nextContact: "April 12, 2022 00:00:00",
     },
     {
       name: "Indiana Jones",
+      job: "Product Designer",
+      company: "LINK",
+      email: "jones@movies.me",
+      lastContact: "March 26, 2022 00:00:00",
+      nextContact: "April 5, 2022 00:00:00",
+    },
+    {
+      name: "Indiana Jones",
+      job: "Product Designer",
+      company: "LINK",
+      email: "jones@movies.me",
+      lastContact: "March 26, 2022 00:00:00",
+      nextContact: "April 5, 2022 00:00:00",
+    },
+    {
+      name: "Indiana Jones",
+      job: "Product Designer",
+      company: "LINK",
+      email: "jones@movies.me",
+      lastContact: "March 26, 2022 00:00:00",
+      nextContact: "April 5, 2022 00:00:00",
+    },
+    {
+      name: "Indiana Jones",
+      job: "Product Designer",
+      company: "LINK",
       email: "jones@movies.me",
       lastContact: "March 26, 2022 00:00:00",
       nextContact: "April 5, 2022 00:00:00",
@@ -39,9 +67,9 @@ const NavItem = ({ to, children }) => {
   return (
     <NavLink
       className={({ isActive }) =>
-        "text-xl ml-12" +
+        "text-2xl ml-12" +
         (isActive
-          ? " font-bold text-purple-5 underline underline-offset-8"
+          ? " font-bold text-purple-4 underline underline-offset-8"
           : " font-normal")
       }
       to={to}
