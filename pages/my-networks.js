@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { CgArrowsExpandRight } from "react-icons/cg";
+import { MdOutlineEmail } from "react-icons/md";
+import { FiLink } from "react-icons/fi";
 
 export default function Networks({ contacts, sort }) {
   const [showForm, setShowForm] = useState(false);
@@ -37,10 +39,10 @@ export default function Networks({ contacts, sort }) {
         {contacts.sort(sort).map((contact) => (
           <div
             key={contact.name}
-            className="inline-block bg-white rounded-2xl shadow-md"
+            className="inline-block bg-white rounded-2xl shadow-md p-6"
           >
-            <div className="flex flex-row my-4">
-              <div className="mx-6 my-3">
+            <div className="flex flex-row">
+              <div className="mr-6 my-3">
                 <Image
                   src="/avatar.png"
                   width="56px"
@@ -64,15 +66,28 @@ export default function Networks({ contacts, sort }) {
                   </div>
                 </div>
               </div>
-              <div className="ml-auto mr-6 mt-2">
-                <CgArrowsExpandRight />
+              <div className="ml-auto mt-1">
+                <CgArrowsExpandRight size={25} />
               </div>
             </div>
-            <div className="bg-gray-2 h-[1px] mx-6" />
-            <p key="email" className="email">
-              {contact.email}
-            </p>
-            <p>Contact by {contact.nextContact}</p>
+            <div className="bg-gray-2 h-[1px] my-4" />
+            <div className="flex flex-row">
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-bold text-gray-3">Info</p>
+                <div className="flex flex-row gap-3 items-center">
+                  <MdOutlineEmail size={20} />
+                  <p key="email" className="email">
+                    {contact.email}
+                  </p>
+                </div>
+                <div className="flex flex-row gap-3 items-center">
+                  <FiLink size={20} />
+                  <p key="linkedin" className="email">
+                    LinkedIn
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
