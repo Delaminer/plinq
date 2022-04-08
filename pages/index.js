@@ -10,6 +10,19 @@ import Networks from "./networks";
 import Templates from "./templates";
 import { useState } from "react";
 
+const TemplateType = {
+  coldEmail: {
+    name: 'COLD EMAIL',
+    bg: 'bg-bubble-orange/[.2]',
+    tc: 'text-bubble-orange',
+  },
+  followup: {
+    name: 'FOLLOW-UP',
+    bg: 'bg-bubble-purple/[.2]',
+    tc: 'text-bubble-purple',
+  }
+}
+
 const defaultData = {
   contacts: [
     {
@@ -35,16 +48,22 @@ const defaultData = {
   ],
   templates: [
     {
-        name: 'Cold Email',
-        type: 'INTRO',
-        subject: 'Reaching out to you',
-        content: 'Hi recruiter how are you?',
+        name: 'LinkedIn Conection',
+        type: TemplateType.coldEmail,
+        subject: '-',
+        content: 'Hi [Name], \n\nMy name is [Name] and I\'m a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...',
     },
     {
         name: 'Career Fair follow-up',
-        type: 'FOLLOW-UP',
-        subject: 'Following up from the career fair!',
-        content: 'I enjoyed talking with you today at the career fair!',
+        type: TemplateType.followup,
+        subject: 'Nice meeting you, [Name]!',
+        content: 'Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...',
+    },
+    {
+        name: 'Informational Interview Re..',
+        type: TemplateType.coldEmail,
+        subject: '[Your name]—informational interview request',
+        content: 'Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I\'m a student studying [Major] at the [University]. I came across the [Role name] position ...',
     },
 ],
 };
