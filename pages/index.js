@@ -7,8 +7,9 @@ import {
 } from "react-router-dom";
 import Reminders from "./follow-up";
 import Networks from "./my-networks";
-import Templates from "./templates";
-import { useState } from "react";
+import Templates from "./Templates";
+import { useEffect, useState } from "react";
+import { FiChrome } from "react-icons/fi";
 
 const TemplateType = {
   coldEmail: {
@@ -27,6 +28,8 @@ const defaultData = {
   contacts: [
     {
       name: "Bob Smith",
+      firstName: "Bob",
+      lastName: "Smith",
       job: "Product Designer",
       company: "LINK",
       email: "bob@bobville.com",
@@ -35,43 +38,13 @@ const defaultData = {
     },
     {
       name: "Alex Alexson",
+      firstName: "Alex",
+      lastName: "Alexson",
       job: "Product Designer",
       company: "LINK",
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
       nextContact: "April 12, 2022 00:00:00",
-    },
-    {
-      name: "Indiana Jones",
-      job: "Product Designer",
-      company: "LINK",
-      email: "jones@movies.me",
-      lastContact: "March 26, 2022 00:00:00",
-      nextContact: "April 5, 2022 00:00:00",
-    },
-    {
-      name: "Indiana Jones",
-      job: "Product Designer",
-      company: "LINK",
-      email: "jones@movies.me",
-      lastContact: "March 26, 2022 00:00:00",
-      nextContact: "April 5, 2022 00:00:00",
-    },
-    {
-      name: "Indiana Jones",
-      job: "Product Designer",
-      company: "LINK",
-      email: "jones@movies.me",
-      lastContact: "March 26, 2022 00:00:00",
-      nextContact: "April 5, 2022 00:00:00",
-    },
-    {
-      name: "Indiana Jones",
-      job: "Product Designer",
-      company: "LINK",
-      email: "jones@movies.me",
-      lastContact: "March 26, 2022 00:00:00",
-      nextContact: "April 5, 2022 00:00:00",
     },
   ],
   templates: [
@@ -115,6 +88,10 @@ const NavItem = ({ to, children }) => {
 export default function Home() {
   const [state, setState] = useState(defaultData);
 
+  useEffect(async () => {
+    setState({...state, ...(await chrome.storage.sync.get('plinq')).plinq});
+  }, []);
+
   return (
     <main>
       <div className="pl-24 bg-white">
@@ -138,7 +115,7 @@ export default function Home() {
               element={
                 <Networks
                   contacts={state.contacts}
-                  sort={(a, b) => a.name.localeCompare(b.name)}
+                  sort={(a, b) => a.lastName.localeCompare(b.lastName)}
                 />
               }
             ></Route>

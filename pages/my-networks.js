@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Image from "next/image";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
@@ -38,12 +37,12 @@ export default function Networks({ contacts, sort }) {
       <div className="grid grid-cols-4 gap-5">
         {contacts.sort(sort).map((contact) => (
           <div
-            key={contact.name}
+            key={contact.lastName+contact.firstName}
             className="inline-block bg-white rounded-2xl shadow-md p-6"
           >
             <div className="flex flex-row">
               <div className="mr-6 my-3">
-                <Image
+                <img
                   src="/avatar.png"
                   width="56px"
                   height="56px"
@@ -52,11 +51,11 @@ export default function Networks({ contacts, sort }) {
               </div>
               <div className="flex flex-col mr-2">
                 <p key="name" className="font-bold text-2xl">
-                  {contact.name}
+                  {contact.firstName} {contact.lastName}
                 </p>
-                <p key="job" className="text-gray-4">
+                {contact.job && <p key="job" className="text-gray-4">
                   {contact.job} @ {contact.company}
-                </p>
+                </p>}
                 <div className="flex flex-row gap-2 mt-2">
                   <div className="bg-purple-3/20 rounded-2xl px-3 py-1 text-purple-3 text-sm font-semibold">
                     B2B
@@ -83,7 +82,7 @@ export default function Networks({ contacts, sort }) {
                 <div className="flex flex-row gap-3 items-center">
                   <FiLink size={20} />
                   <p key="linkedin" className="email">
-                    LinkedIn
+                    <a href={contact.linkedIn} target="_blank">LinkedIn</a>
                   </p>
                 </div>
               </div>
