@@ -12,36 +12,8 @@ setupLink('goto-reminders', 'Reminders.html');
 setupLink('goto-networks', 'Networks.html');
 setupLink('goto-templates', 'Templates.html');
 
-// Save this User button: Quickly grab info and save it
-document.querySelector('#save-user').addEventListener('click', async () => {
-  console.log('Saving user!')
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  tab = tab.window
-  // tab.console.log('Hey tab im saving you!')
-  const source = id => tab.document.querySelector('#' + id).textContent;
-
-  function extractContactInfo(doc) {
-    const mailLink = doc.querySelector('.ci-email .pv-contact-info__contact-link');
-    return { email: mailLink == null ? null : mailLink.href.slice(7) };
-  }
-  contact = {};
-  contact.name = source('pv-contact-info');
-  contact.email = extractContactInfo(tab.document).email;
-  chrome.storage.sync.get('plinq', ({'plinq': data}) => {
-    data.contacts.push(contact);
-    chrome.storage.sync.set({ 'plinq': data });
-  });
-});
-
 // Goto Linkedin button: Open a new tab to the specified linkedin link
-document.querySelector('#goto-linkedin').addEventListener('click', () => {
-  chrome.tabs.create({
-    active: true,
-    url: 'https://www.linkedin.com/mynetwork/invite-connect/connections/'
-  });
-});
-
-document.querySelector('#load-users').addEventListener('click', async () => {
+document.querySelector('#goto-linkedin').addEventListener('click', async () => {
   await chrome.storage.sync.set({'liImporting': true});
   let tab = await chrome.tabs.create({
     active: true,
