@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Reminders from "./follow-up";
 import Networks from "./my-networks";
-import Templates from "./Templates";
+import Templates from "./templates";
 import { useEffect, useState } from "react";
 import { FiChrome } from "react-icons/fi";
 
@@ -89,6 +89,7 @@ export default function Home() {
   const [state, setState] = useState(defaultData);
 
   useEffect(async () => {
+    if (chrome && chrome.storage && chrome.storage.sync)
     setState({...state, ...(await chrome.storage.sync.get('plinq')).plinq});
   }, []);
 
