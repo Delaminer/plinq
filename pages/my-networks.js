@@ -37,7 +37,7 @@ export default function Networks({ contacts, sort }) {
       <div className="grid grid-cols-4 gap-5">
         {contacts.sort(sort).map((contact) => (
           <div
-            key={contact.lastName+contact.firstName}
+            key={contact.lastName + contact.firstName}
             className="inline-block bg-white rounded-2xl shadow-md p-6"
           >
             <div className="flex flex-row">
@@ -53,9 +53,11 @@ export default function Networks({ contacts, sort }) {
                 <p key="name" className="font-bold text-2xl">
                   {contact.firstName} {contact.lastName}
                 </p>
-                {contact.job && <p key="job" className="text-gray-4">
-                  {contact.job} @ {contact.company}
-                </p>}
+                {contact.job && (
+                  <p key="job" className="text-gray-4">
+                    {contact.job} @ {contact.company}
+                  </p>
+                )}
                 <div className="flex flex-row gap-2 mt-2">
                   <div className="bg-purple-3/20 rounded-2xl px-3 py-1 text-purple-3 text-sm font-semibold">
                     B2B
@@ -82,7 +84,9 @@ export default function Networks({ contacts, sort }) {
                 <div className="flex flex-row gap-3 items-center">
                   <FiLink size={20} />
                   <p key="linkedin" className="email">
-                    <a href={contact.linkedIn} target="_blank">LinkedIn</a>
+                    <a href={contact.linkedIn} target="_blank">
+                      LinkedIn
+                    </a>
                   </p>
                 </div>
               </div>
