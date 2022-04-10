@@ -20,8 +20,8 @@ function sidebarHtml(contacts, existingIds) {
     <div>
       <input class="artdeco-text-input--search artdeco-text-input--input" placeholder="Search by name..." type="search" id="plinq-control-search">
     </div>
-    <button class="artdeco-button" style="margin:20px;" id="plinq-control-select-all">Add/Update All</button>
-    <div>` + contacts.filter(it => it != undefined).map(ct => `<div style="display: flex; align-items:center;background-color:#dadada; border-radius: 8px; margin: 4px; padding: 8px;">
+    <button class="artdeco-button" style="margin:16px;align-self:flex-end" id="plinq-control-select-all">Add/Update All</button>
+    <div>` + contacts.filter(it => it != undefined).map(ct => `<div style="display: flex; align-items:center;background-color:var(--color-background-container)!important; border-radius: 8px; margin: 4px; padding: 8px;">
       <img style="width:50px;border-radius:25px;" class="${extractProfilePictureUrl(ct) == null ? 'ghost-person' : ''}" src="${extractProfilePictureUrl(ct) || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}" alt="profile picture for ${ct.firstName} ${ct.lastName}">
       <div style="margin-left:8px">
         <p class="t-16 t-normal t-bold">${ct.firstName} ${ct.lastName}</p>
@@ -31,7 +31,7 @@ function sidebarHtml(contacts, existingIds) {
       </div>
     </div>`).join('') + `</div>`;
   return `
-  <aside style="position:fixed;top:20px;right:20px;bottom:20px;border-radius:1rem;background:#eee;border:2px solid #999;box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);padding:12px;z-index:10000000;overflow:scroll" id="plinq-importer">
+  <aside style="position:fixed;top:20px;right:20px;bottom:20px;border-radius:1rem;background:var(--color-background-canvas)!important;border:2px solid #999;box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);padding:12px;z-index:10000000;overflow:scroll;display:flex;flex-direction:column;" id="plinq-importer">
     ${body}
   </aside>`;
 }
