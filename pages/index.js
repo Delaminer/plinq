@@ -9,20 +9,19 @@ import Reminders from "./follow-up";
 import Networks from "./my-networks";
 import Templates from "./templates";
 import { useEffect, useState } from "react";
-import { FiChrome } from "react-icons/fi";
 
 const TemplateType = {
   coldEmail: {
-    name: 'COLD EMAIL',
-    bg: 'bg-bubble-orange/[.2]',
-    tc: 'text-bubble-orange',
+    name: "COLD EMAIL",
+    bg: "bg-orange/20",
+    tc: "text-orange",
   },
   followup: {
-    name: 'FOLLOW-UP',
-    bg: 'bg-bubble-purple/[.2]',
-    tc: 'text-bubble-purple',
-  }
-}
+    name: "FOLLOW-UP",
+    bg: "bg-purple-3/20",
+    tc: "text-purple-3",
+  },
+};
 
 const defaultData = {
   contacts: [
@@ -49,24 +48,27 @@ const defaultData = {
   ],
   templates: [
     {
-        name: 'LinkedIn Conection',
-        type: TemplateType.coldEmail,
-        subject: '-',
-        content: 'Hi [Name], \n\nMy name is [Name] and I\'m a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...',
+      name: "LinkedIn Conection",
+      type: TemplateType.coldEmail,
+      subject: "-",
+      content:
+        "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
     },
     {
-        name: 'Career Fair follow-up',
-        type: TemplateType.followup,
-        subject: 'Nice meeting you, [Name]!',
-        content: 'Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...',
+      name: "Career Fair follow-up",
+      type: TemplateType.followup,
+      subject: "Nice meeting you, [Name]!",
+      content:
+        "Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...",
     },
     {
-        name: 'Informational Interview Re..',
-        type: TemplateType.coldEmail,
-        subject: '[Your name]—informational interview request',
-        content: 'Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I\'m a student studying [Major] at the [University]. I came across the [Role name] position ...',
+      name: "Informational Interview Re..",
+      type: TemplateType.coldEmail,
+      subject: "[Your name]—informational interview request",
+      content:
+        "Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
     },
-],
+  ],
 };
 
 const NavItem = ({ to, children }) => {
@@ -90,7 +92,7 @@ export default function Home() {
 
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync)
-    setState({...state, ...(await chrome.storage.sync.get('plinq')).plinq});
+    setState({ ...state, ...(await chrome.storage.sync.get("plinq")).plinq });
   }, []);
 
   return (
@@ -120,7 +122,10 @@ export default function Home() {
                 />
               }
             ></Route>
-            <Route path="templates" element={<Templates templates={state.templates}/>}></Route>
+            <Route
+              path="templates"
+              element={<Templates templates={state.templates} />}
+            ></Route>
           </Routes>
         </div>
       </BrowserRouter>

@@ -55,13 +55,13 @@ export default function Reminders({ contacts }) {
             <div className="flex flex-row justify-end gap-2 mt-7">
               <button
                 className="px-6 border-2 border-purple-4 rounded-lg text-purple-4 h-12 font-semibold text-sm"
-                onClick={() => setShowForm(true)}
+                onClick={() => window.open("http://twitter.com/saigowthamr")}
               >
                 Follow-Up
               </button>
               <button
                 className="flex border-2 border-purple-4 rounded-lg text-purple-4 h-12 w-12 justify-center items-center font-semibold text-sm"
-                onClick={() => setShowForm(true)}
+                onClick={() => {}}
               >
                 <BsCheck2 size={30}/>
               </button>
