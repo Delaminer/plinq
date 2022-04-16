@@ -43,7 +43,7 @@ const defaultData = {
       company: "LINK",
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
-      nextContact: "April 12, 2022 00:00:00",
+      nextContact: "April 22, 2022 00:00:00",
     },
   ],
   templates: [
@@ -89,11 +89,28 @@ const NavItem = ({ to, children }) => {
 
 export default function Home() {
   const [state, setState] = useState(defaultData);
+  const [savedState, setSavedState] = useState({});
 
+  // Get data from storage
   useEffect(async () => {
-    if (chrome && chrome.storage && chrome.storage.sync)
-    setState({ ...state, ...(await chrome.storage.sync.get("plinq")).plinq });
+    if (chrome && chrome.storage && chrome.storage.sync) {
+      const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
+      console.log(savedData)
+      setState(savedData);
+      setSavedState(savedData);
+    }
   }, []);
+
+  // Save new data to storage
+  useEffect(async () => {
+    console.log('new state')
+    if (chrome && chrome.storage && chrome.storage.sync && state != savedState) {
+      console.log('saving...')
+      // We have unsaved changes. Save them!
+      await chrome.storage.sync.set({"plinq": state});
+      setSavedState(state);
+    }
+  }, [state]);
 
   return (
     <main>
@@ -111,7 +128,21 @@ export default function Home() {
             <Route path="/" element={<Navigate to="/follow-up" />}></Route>
             <Route
               path="follow-up"
-              element={<Reminders contacts={state.contacts} />}
+              element={<Reminders
+                contacts={state.contacts}
+                followup={contact => {
+                  // Find the contact
+                  const index = state.contacts.indexOf(contact);
+                  const last = new Date()
+                  const next = new Date(last)
+                  // Next contact is in two weeks, 14 days from today
+                  next.setDate(next.getDate() + 14)
+                  state.contacts[index] = {... contact, 
+                    lastContact: last.toString(), nextContact: next.toString()}
+                  console.log('updating state!')
+                  setState(state)
+                }}  
+              />}
             ></Route>
             <Route
               path="my-networks"

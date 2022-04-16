@@ -19,14 +19,21 @@ const months = [
   "Nov",
   "Dev",
 ];
+
 // Display a date object as Jan 1
 const nameText = (date) => `${months[date.getMonth()]} ${date.getDate()}`;
 // Get the color to use based on a date
-const colorTime = (date) =>
-  new Date().getTime() - date.getTime() > 0 ? "red-1" : "green-1";
+const colorTime = (date) => 
+  (new Date().getTime() - date.getTime() > 0) ? "fill-red-1" : "fill-green-1";
 
-export default function Reminders({ contacts }) {
-  console.log(colorTime(new Date(contacts[1].nextContact)));
+// Convert an email, subject, and message into a link that generates this draft email
+const emailLink = (email, subject, body) => 
+  `mailto:${email}?subject=${subject.replaceAll('\n', '%0A').replaceAll(' ', '%20')}&body=${body.replaceAll('\n', '%0A').replaceAll(' ', '%20')}`;
+
+// Get the link to start a follow up email to a given contact
+const followupLink = (contact) => emailLink(contact.email, 'Hello there!', `How are you, ${contact.firstName}?\nI hope you are doing well.\n\nBest,\nYour Name`);
+
+export default function Reminders({ contacts, followup }) {
   return (
     <div className="pt-9">
       {contacts.sort(sort).map((contact) => (
@@ -36,7 +43,7 @@ export default function Reminders({ contacts }) {
         >
           <div className="float-right">
             <BsFillCircleFill
-              className={"fill-" + colorTime(new Date(contact.nextContact))}
+              className={colorTime(new Date(contact.nextContact))}
             />
           </div>
           <div className="flex flex-row">
@@ -77,13 +84,13 @@ export default function Reminders({ contacts }) {
           <div className="flex flex-row justify-end gap-2 mt-7">
             <button
               className="px-6 border-2 border-purple-4 rounded-lg text-purple-4 h-12 font-semibold text-sm"
-              onClick={() => window.open("http://twitter.com/saigowthamr")}
+              onClick={() => window.open(followupLink(contact))}
             >
               Follow-Up
             </button>
             <button
               className="flex border-2 border-purple-4 rounded-lg text-purple-4 h-12 w-12 justify-center items-center font-semibold text-sm"
-              onClick={() => {}}
+              onClick={() => followup(contact)}
             >
               <BsCheck2 size={30} />
             </button>
