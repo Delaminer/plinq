@@ -12,10 +12,10 @@ const nameText = date => `${months[date.getMonth()]} ${date.getDate()}`;
 const colorTime = date => (new Date().getTime() - date.getTime() > 0) ? "red-1" : "green-1";
 
 export default function Reminders({ contacts }) {
-  console.log(colorTime(new Date(contacts[1].nextContact)))
+  // console.log(colorTime(new Date(contacts[1].nextContact)))
   return (
     <>
-        {contacts.sort(sort).map((contact) => (
+        {contacts.filter(contact => contact.lastContact != undefined).sort(sort).map((contact) => (
           <div
             key={contact.lastName + contact.firstName}
             className="inline-block bg-white rounded-2xl shadow-md p-6"

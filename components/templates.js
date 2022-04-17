@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
-import TemplateEditor from "../components/templateEditor";
+import TemplateEditor from "./templateEditor";
 
 const TypeIcon = ({type}) => (
     <p className={`${type.bg} ${type.tc} font-normal w-fit rounded-xl px-2`}>{type.name}</p>

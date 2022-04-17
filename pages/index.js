@@ -1,14 +1,8 @@
-import {
-  Routes,
-  Route,
-  BrowserRouter,
-  NavLink,
-  Navigate,
-} from "react-router-dom";
-import Reminders from "./follow-up";
-import Networks from "./my-networks";
-import Templates from "./templates";
+import Reminders from "../components/follow-up";
+import Networks from "../components/my-networks";
+import Templates from '../components/templates';
 import { useEffect, useState } from "react";
+import React from "react";
 
 const TemplateType = {
   coldEmail: {
@@ -71,64 +65,76 @@ const defaultData = {
   ],
 };
 
-const NavItem = ({ to, children }) => {
+const NavItem = ({ hash, to, children }) => {
+  const isActive = hash === to;
   return (
-    <NavLink
-      className={({ isActive }) =>
+    <a
+      className={
         "text-2xl ml-12" +
         (isActive
           ? " font-bold text-purple-4 underline underline-offset-8"
           : " font-normal")
       }
-      to={to}
+      href={to}
     >
       {children}
-    </NavLink>
+    </a>
   );
 };
 
+const Tab = ({ hash, path, element }) => {
+  return <>
+    {hash === path ? element : null}
+  </>;
+}
+
 export default function Home() {
   const [state, setState] = useState(defaultData);
+  const [windowHash, setWindowHash] = useState(window.location.hash);
 
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync)
-    setState({ ...state, ...(await chrome.storage.sync.get("plinq")).plinq });
+      setState({ ...state, ...(await chrome.storage.sync.get("plinq")).plinq });
+
+    window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
   }, []);
 
   return (
-    <main>
-      <div className="pl-24 bg-white">
-        <img src="/logo.svg" className="pt-2.5"></img>
-      </div>
-      <BrowserRouter>
-        <nav className="p-6 pl-12 bg-white flex w-screen">
-          <NavItem to="follow-up">Follow-up</NavItem>
-          <NavItem to="my-networks">My Networks</NavItem>
-          <NavItem to="templates">Templates</NavItem>
-        </nav>
-        <div className="pr-24 pl-24 bg-gray-1">
-          <Routes>
-            <Route path="/" element={<Navigate to="/follow-up" />}></Route>
-            <Route
-              path="follow-up"
-              element={<Reminders contacts={state.contacts} />}
-            ></Route>
-            <Route
-              path="my-networks"
-              element={
-                <Networks
-                  contacts={state.contacts}
-                  sort={(a, b) => a.lastName.localeCompare(b.lastName)}
-                />
-              }
-            ></Route>
-            <Route
-              path="templates"
-              element={<Templates templates={state.templates} />}
-            ></Route>
-          </Routes>
+    <React.Fragment>
+      <header>
+        <div className="pl-24 bg-white">
+          <img src="/logo.svg" className="pt-2.5"></img>
         </div>
-      </BrowserRouter>
-    </main>
+        <nav className="p-6 pl-12 bg-white flex w-screen">
+          <NavItem hash={windowHash} to="#follow-up">Follow-up</NavItem>
+          <NavItem hash={windowHash} to="#my-networks">My Networks</NavItem>
+          <NavItem hash={windowHash} to="#templates">Templates</NavItem>
+        </nav>
+      </header>
+      <main>
+        <div className="pr-24 pl-24 bg-gray-1">
+          <Tab
+            hash={windowHash}
+            path="#follow-up"
+            element={<Reminders contacts={state.contacts} />}
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#my-networks"
+            element={
+              <Networks
+                contacts={state.contacts}
+                sort={(a, b) => a.lastName.localeCompare(b.lastName)}
+              />
+            }
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#templates"
+            element={<Templates templates={state.templates} />}
+          ></Tab>
+        </div>
+      </main>
+    </React.Fragment>
   );
 }
