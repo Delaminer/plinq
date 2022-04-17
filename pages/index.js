@@ -26,24 +26,30 @@ const TemplateType = {
 const defaultData = {
   contacts: [
     {
-      name: "Bob Smith",
       firstName: "Bob",
       lastName: "Smith",
       job: "Product Designer",
       company: "LINK",
       email: "bob@bobville.com",
       lastContact: "February 26, 2022 00:00:00",
-      nextContact: "April 1, 2022 00:00:00",
+      contactInterval: 14,
     },
     {
-      name: "Alex Alexson",
       firstName: "Alex",
       lastName: "Alexson",
       job: "Product Designer",
       company: "LINK",
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
-      nextContact: "April 22, 2022 00:00:00",
+      contactInterval: 7,
+    },
+    {
+      firstName: "Mr",
+      lastName: "LinkedIn",
+      linkedIn: `https://www.linkedin.com/in/michael-peng-0a669617b/`,
+      email: "contact@cool.com",
+      phone: '555-666-7788',
+      website: 'https://linkedin.profile.me'
     },
   ],
   templates: [
@@ -95,7 +101,6 @@ export default function Home() {
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync) {
       const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
-      console.log(savedData)
       setState(savedData);
       setSavedState(savedData);
     }
@@ -103,9 +108,7 @@ export default function Home() {
 
   // Save new data to storage
   useEffect(async () => {
-    console.log('new state')
     if (chrome && chrome.storage && chrome.storage.sync && state != savedState) {
-      console.log('saving...')
       // We have unsaved changes. Save them!
       await chrome.storage.sync.set({"plinq": state});
       setSavedState(state);
@@ -133,14 +136,14 @@ export default function Home() {
                 followup={contact => {
                   // Find the contact
                   const index = state.contacts.indexOf(contact);
-                  const last = new Date()
-                  const next = new Date(last)
-                  // Next contact is in two weeks, 14 days from today
-                  next.setDate(next.getDate() + 14)
-                  state.contacts[index] = {... contact, 
-                    lastContact: last.toString(), nextContact: next.toString()}
-                  console.log('updating state!')
-                  setState(state)
+                  if (index == -1) return;
+
+                  const last = new Date();
+                  last.setHours(0, 0, 0, 0); // We just want the day, not the time
+                  // Modify this contact
+                  state.contacts[index] = {... contact, lastContact: last.toString()}
+                  // Unpack the state object to force a reload
+                  setState({...state})
                 }}  
               />}
             ></Route>

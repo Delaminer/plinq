@@ -3,7 +3,14 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import { BsCheck, BsCheck2, BsFillCircleFill } from "react-icons/bs";
 
-const sort = (a, b) => new Date(a.nextContact) - new Date(b.nextContact);
+const calculateNextContact = (last, interval) => {
+  last.setDate(last.getDate() + interval);
+  return last;
+}
+
+const sort = (a, b) => 
+  (new Date(a.lastContact).getTime() + a.contactInterval * 24 * 60 * 60 * 1000) - 
+  (new Date(b.lastContact).getTime() + b.contactInterval * 24 * 60 * 60 * 1000);
 
 const months = [
   "Jan",
@@ -36,14 +43,14 @@ const followupLink = (contact) => emailLink(contact.email, 'Hello there!', `How 
 export default function Reminders({ contacts, followup }) {
   return (
     <div className="pt-9">
-      {contacts.sort(sort).map((contact) => (
+      {contacts.filter(c => c.contactInterval).sort(sort).map((contact) => (
         <div
           key={contact.lastName + contact.firstName}
           className="inline-block bg-white rounded-2xl shadow-md p-6"
         >
           <div className="float-right">
             <BsFillCircleFill
-              className={colorTime(new Date(contact.nextContact))}
+              className={colorTime(calculateNextContact(new Date(contact.lastContact), contact.contactInterval))}
             />
           </div>
           <div className="flex flex-row">
@@ -77,7 +84,7 @@ export default function Reminders({ contacts, followup }) {
             <div className="flex flex-col">
               <p className="text-sm text-gray-3 text-center">Next Contact</p>
               <p className="text-sm font-bold text-center">
-                {nameText(new Date(contact.nextContact))}
+                {nameText(calculateNextContact(new Date(contact.lastContact), contact.contactInterval))}
               </p>
             </div>
           </div>
