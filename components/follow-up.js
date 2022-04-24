@@ -35,15 +35,16 @@ const colorTime = (date) =>
 
 // Convert an email, subject, and message into a link that generates this draft email
 const emailLink = (email, subject, body) => 
-  `mailto:${email}?subject=${subject.replaceAll('\n', '%0A').replaceAll(' ', '%20')}&body=${body.replaceAll('\n', '%0A').replaceAll(' ', '%20')}`;
+`mailto:${email}?subject=${subject.replaceAll('\n', '%0A').replaceAll(' ', '%20')}&body=${body.replaceAll('\n', '%0A').replaceAll(' ', '%20')}`;
 
 // Get the link to start a follow up email to a given contact
 const followupLink = (contact) => emailLink(contact.email, 'Hello there!', `How are you, ${contact.firstName}?\nI hope you are doing well.\n\nBest,\nYour Name`);
 
-export default function Reminders({ contacts, followup }) {
+export default function Reminders({ contacts }) {
+  // console.log(colorTime(new Date(contacts[1].nextContact)))
   return (
     <div className="pt-9">
-      {contacts.filter(c => c.contactInterval).sort(sort).map((contact) => (
+      {contacts.filter(c => c.lastContact != undefined && c.contactInterval).sort(sort).map((contact) => (
         <div
           key={contact.lastName + contact.firstName}
           className="inline-block bg-white rounded-2xl shadow-md p-6"

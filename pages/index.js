@@ -1,14 +1,8 @@
-import {
-  Routes,
-  Route,
-  BrowserRouter,
-  NavLink,
-  Navigate,
-} from "react-router-dom";
-import Reminders from "./follow-up";
-import Networks from "./my-networks";
-import Templates from "./templates";
+import Reminders from "../components/follow-up";
+import Networks from "../components/my-networks";
+import Templates from '../components/templates';
 import { useEffect, useState } from "react";
+import React from "react";
 
 const TemplateType = {
   coldEmail: {
@@ -77,29 +71,38 @@ const defaultData = {
   ],
 };
 
-const NavItem = ({ to, children }) => {
+const NavItem = ({ hash, to, children }) => {
+  const isActive = hash === to;
   return (
-    <NavLink
-      className={({ isActive }) =>
+    <a
+      className={
         "text-2xl ml-12" +
         (isActive
           ? " font-bold text-purple-4 underline underline-offset-8"
           : " font-normal")
       }
-      to={to}
+      href={to}
     >
       {children}
-    </NavLink>
+    </a>
   );
 };
 
+const Tab = ({ hash, path, element }) => {
+  return <>
+    {hash === path ? element : null}
+  </>;
+}
+
 export default function Home() {
   const [state, setState] = useState(defaultData);
+  const [windowHash, setWindowHash] = useState(window.location.hash);
   const [savedState, setSavedState] = useState({});
 
   // Get data from storage
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync) {
+      window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
       const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
       setState(savedData);
       setSavedState(savedData);
@@ -116,63 +119,64 @@ export default function Home() {
   }, [state]);
 
   return (
-    <main>
-      <div className="pl-24 bg-white">
-        <img src="/logo.svg" className="pt-2.5"></img>
-      </div>
-      <BrowserRouter>
+    <React.Fragment>
+      <header>
+        <div className="pl-24 bg-white">
+          <img src="/logo.svg" className="pt-2.5"></img>
+        </div>
         <nav className="p-6 pl-12 bg-white flex w-screen">
-          <NavItem to="follow-up">Follow-up</NavItem>
-          <NavItem to="my-networks">My Networks</NavItem>
-          <NavItem to="templates">Templates</NavItem>
+          <NavItem hash={windowHash} to="#follow-up">Follow-up</NavItem>
+          <NavItem hash={windowHash} to="#my-networks">My Networks</NavItem>
+          <NavItem hash={windowHash} to="#templates">Templates</NavItem>
         </nav>
+      </header>
+      <main>
         <div className="pr-24 pl-24 bg-gray-1">
-          <Routes>
-            <Route path="/" element={<Navigate to="/follow-up" />}></Route>
-            <Route
-              path="follow-up"
-              element={<Reminders
+          <Tab
+            hash={windowHash}
+            path="#follow-up"
+            element={<Reminders
+              contacts={state.contacts}
+              followup={contact => {
+                // Find the contact
+                const index = state.contacts.indexOf(contact);
+                if (index == -1) return;
+
+                const last = new Date();
+                last.setHours(0, 0, 0, 0); // We just want the day, not the time
+                // Modify this contact
+                state.contacts[index] = {... contact, lastContact: last.toString()};
+                // Unpack the state object to force a reload
+                setState({...state});
+              }}/>}
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#my-networks"
+            element={
+              <Networks
                 contacts={state.contacts}
-                followup={contact => {
+                sort={(a, b) => a.lastName.localeCompare(b.lastName)}
+                setFollowup={contact => {
                   // Find the contact
                   const index = state.contacts.indexOf(contact);
                   if (index == -1) return;
 
                   const last = new Date();
-                  last.setHours(0, 0, 0, 0); // We just want the day, not the time
-                  // Modify this contact
-                  state.contacts[index] = {... contact, lastContact: last.toString()};
-                  // Unpack the state object to force a reload
+                  last.setHours(0, 0, 0, 0);
+                  state.contacts[index] = {... contact, lastContact: last.toString(), contactInterval: 14};
                   setState({...state});
-                }}  
-              />}
-            ></Route>
-            <Route
-              path="my-networks"
-              element={
-                <Networks
-                  contacts={state.contacts}
-                  sort={(a, b) => a.lastName.localeCompare(b.lastName)}
-                  setFollowup={contact => {
-                    // Find the contact
-                    const index = state.contacts.indexOf(contact);
-                    if (index == -1) return;
-
-                    const last = new Date();
-                    last.setHours(0, 0, 0, 0);
-                    state.contacts[index] = {... contact, lastContact: last.toString(), contactInterval: 14};
-                    setState({...state});
-                  }}
-                />
-              }
-            ></Route>
-            <Route
-              path="templates"
-              element={<Templates templates={state.templates} />}
-            ></Route>
-          </Routes>
+                }}
+              />
+            }
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#templates"
+            element={<Templates templates={state.templates} />}
+          ></Tab>
         </div>
-      </BrowserRouter>
-    </main>
+      </main>
+    </React.Fragment>
   );
 }
