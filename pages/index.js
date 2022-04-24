@@ -1,95 +1,182 @@
-import {
-  Routes,
-  Route,
-  BrowserRouter,
-  NavLink,
-  Navigate,
-} from "react-router-dom";
-import Reminders from "./reminders";
-import Networks from "./networks";
-import Templates from "./templates";
-import { useState } from "react";
+import Reminders from "../components/follow-up";
+import Networks from "../components/my-networks";
+import Templates from '../components/templates';
+import { useEffect, useState } from "react";
+import React from "react";
+
+const TemplateType = {
+  coldEmail: {
+    name: "COLD EMAIL",
+    bg: "bg-orange/20",
+    tc: "text-orange",
+  },
+  followup: {
+    name: "FOLLOW-UP",
+    bg: "bg-purple-3/20",
+    tc: "text-purple-3",
+  },
+};
 
 const defaultData = {
   contacts: [
     {
-      name: "Bob Smith",
+      firstName: "Bob",
+      lastName: "Smith",
       job: "Product Designer",
       company: "LINK",
       email: "bob@bobville.com",
       lastContact: "February 26, 2022 00:00:00",
-      nextContact: "April 1, 2022 00:00:00",
+      contactInterval: 14,
     },
     {
-      name: "Alex Alexson",
+      firstName: "Alex",
+      lastName: "Alexson",
+      job: "Product Designer",
+      company: "LINK",
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
-      nextContact: "April 12, 2022 00:00:00",
+      contactInterval: 7,
     },
     {
-      name: "Indiana Jones",
-      email: "jones@movies.me",
-      lastContact: "March 26, 2022 00:00:00",
-      nextContact: "April 5, 2022 00:00:00",
+      firstName: "Mr",
+      lastName: "LinkedIn",
+      linkedIn: `https://www.linkedin.com/in/michael-peng-0a669617b/`,
+      email: "contact@cool.com",
+      phone: '555-666-7788',
+      website: 'https://linkedin.profile.me'
+    },
+  ],
+  templates: [
+    {
+      name: "LinkedIn Conection",
+      type: TemplateType.coldEmail,
+      subject: "-",
+      content:
+        "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
+    },
+    {
+      name: "Career Fair follow-up",
+      type: TemplateType.followup,
+      subject: "Nice meeting you, [Name]!",
+      content:
+        "Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...",
+    },
+    {
+      name: "Informational Interview Re..",
+      type: TemplateType.coldEmail,
+      subject: "[Your name]—informational interview request",
+      content:
+        "Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
     },
   ],
 };
 
-const Base = () => (
-  <>
-    <p>Welcome to Plinq! Please select a tab</p>
-    {/* <Redirect to="/reminders" /> */}
-  </>
-);
-
-const NavItem = ({ to, children }) => {
+const NavItem = ({ hash, to, children }) => {
+  const isActive = hash === to;
   return (
-    <NavLink
-      className={({ isActive }) =>
-        "text-xl m-12" +
-        (isActive ? " font-bold text-purple-7" : " font-normal")
+    <a
+      className={
+        "text-2xl ml-12" +
+        (isActive
+          ? " font-bold text-purple-4 underline underline-offset-8"
+          : " font-normal")
       }
-      to={to}
+      href={to}
     >
       {children}
-    </NavLink>
+    </a>
   );
 };
 
+const Tab = ({ hash, path, element }) => {
+  return <>
+    {hash === path ? element : null}
+  </>;
+}
+
 export default function Home() {
   const [state, setState] = useState(defaultData);
+  const [windowHash, setWindowHash] = useState(window.location.hash);
+  const [savedState, setSavedState] = useState({});
+
+  // Get data from storage
+  useEffect(async () => {
+    if (chrome && chrome.storage && chrome.storage.sync) {
+      window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
+      const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
+      setState(savedData);
+      setSavedState(savedData);
+    }
+  }, []);
+
+  // Save new data to storage
+  useEffect(async () => {
+    if (chrome && chrome.storage && chrome.storage.sync && state != savedState) {
+      // We have unsaved changes. Save them!
+      await chrome.storage.sync.set({"plinq": state});
+      setSavedState(state);
+    }
+  }, [state]);
 
   return (
-    <main>
-      <div className="pl-24">
-        <img src="/logo.svg" className="pt-2.5"></img>
-      </div>
-      <BrowserRouter>
-        <nav className="m-12">
-          <NavItem to="reminders">Reminders</NavItem>
-          <NavItem to="networks">Networks</NavItem>
-          <NavItem to="templates">Templates</NavItem>
-        </nav>
-        <div className="pr-24 pl-24 bg-gray-1 h-fit overflow-scroll">
-          <Routes>
-            <Route path="/" element={<Navigate to="/reminders" />}></Route>
-            <Route
-              path="reminders"
-              element={<Reminders contacts={state.contacts} />}
-            ></Route>
-            <Route
-              path="networks"
-              element={
-                <Networks
-                  contacts={state.contacts}
-                  sort={(a, b) => a.name.localeCompare(b.name)}
-                />
-              }
-            ></Route>
-            <Route path="templates" element={<Templates />}></Route>
-          </Routes>
+    <React.Fragment>
+      <header>
+        <div className="pl-24 bg-white">
+          <img src="/logo.svg" className="pt-2.5"></img>
         </div>
-      </BrowserRouter>
-    </main>
+        <nav className="p-6 pl-12 bg-white flex w-screen">
+          <NavItem hash={windowHash} to="#follow-up">Follow-up</NavItem>
+          <NavItem hash={windowHash} to="#my-networks">My Networks</NavItem>
+          <NavItem hash={windowHash} to="#templates">Templates</NavItem>
+        </nav>
+      </header>
+      <main>
+        <div className="pr-24 pl-24 bg-gray-1">
+          <Tab
+            hash={windowHash}
+            path="#follow-up"
+            element={<Reminders
+              contacts={state.contacts}
+              followup={contact => {
+                // Find the contact
+                const index = state.contacts.indexOf(contact);
+                if (index == -1) return;
+
+                const last = new Date();
+                last.setHours(0, 0, 0, 0); // We just want the day, not the time
+                // Modify this contact
+                state.contacts[index] = {... contact, lastContact: last.toString()};
+                // Unpack the state object to force a reload
+                setState({...state});
+              }}/>}
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#my-networks"
+            element={
+              <Networks
+                contacts={state.contacts}
+                sort={(a, b) => a.lastName.localeCompare(b.lastName)}
+                setFollowup={contact => {
+                  // Find the contact
+                  const index = state.contacts.indexOf(contact);
+                  if (index == -1) return;
+
+                  const last = new Date();
+                  last.setHours(0, 0, 0, 0);
+                  state.contacts[index] = {... contact, lastContact: last.toString(), contactInterval: 14};
+                  setState({...state});
+                }}
+              />
+            }
+          ></Tab>
+          <Tab
+            hash={windowHash}
+            path="#templates"
+            element={<Templates templates={state.templates} />}
+          ></Tab>
+        </div>
+      </main>
+    </React.Fragment>
   );
 }

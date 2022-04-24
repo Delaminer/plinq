@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.base {
-  padding: 50px;
+body {
+  background-color: #f9f9f9;
 }
