@@ -3,7 +3,7 @@ import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 
-export default function Networks({ contacts, sort }) {
+export default function Networks({ contacts, sort, setFollowup }) {
   const [showForm, setShowForm] = useState(false);
 
   return (
@@ -68,7 +68,9 @@ export default function Networks({ contacts, sort }) {
                 </div>
               </div>
               <div className="ml-auto mt-1">
-                <CgArrowsExpandRight size={25} />
+                <CgArrowsExpandRight size={25} className="cursor-pointer"
+                  onClick={() => setFollowup(contact)}
+                />
               </div>
             </div>
             <div className="bg-gray-2 h-[1px] my-4" />

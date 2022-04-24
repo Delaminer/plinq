@@ -141,9 +141,9 @@ export default function Home() {
                   const last = new Date();
                   last.setHours(0, 0, 0, 0); // We just want the day, not the time
                   // Modify this contact
-                  state.contacts[index] = {... contact, lastContact: last.toString()}
+                  state.contacts[index] = {... contact, lastContact: last.toString()};
                   // Unpack the state object to force a reload
-                  setState({...state})
+                  setState({...state});
                 }}  
               />}
             ></Route>
@@ -153,6 +153,16 @@ export default function Home() {
                 <Networks
                   contacts={state.contacts}
                   sort={(a, b) => a.lastName.localeCompare(b.lastName)}
+                  setFollowup={contact => {
+                    // Find the contact
+                    const index = state.contacts.indexOf(contact);
+                    if (index == -1) return;
+
+                    const last = new Date();
+                    last.setHours(0, 0, 0, 0);
+                    state.contacts[index] = {... contact, lastContact: last.toString(), contactInterval: 14};
+                    setState({...state});
+                  }}
                 />
               }
             ></Route>
