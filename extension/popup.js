@@ -8,9 +8,9 @@ const setupLink = (elementId, url) => {
 }
 
 // These buttons pull up each of the main pages
-setupLink('goto-reminders', 'follow-up.html');
-setupLink('goto-networks', 'my-networks.html');
-setupLink('goto-templates', 'templates.html');
+setupLink('goto-reminders', 'index.html#follow-up');
+setupLink('goto-networks', 'index.html#my-networks');
+setupLink('goto-templates', 'index.html#templates');
 
 // Goto Linkedin button: Open a new tab to the specified linkedin link
 document.querySelector('#goto-linkedin').addEventListener('click', async () => {
