@@ -1,5 +1,5 @@
-import CgMathPlus from "react-icons/cg";
-import FiExternalLink from "react-icons/fi";
+import { CgMathPlus } from "react-icons/cg";
+import { FiExternalLink } from "react-icons/fi";
 
 export default function PopupButton({ text, plus }) {
   return (

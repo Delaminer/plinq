@@ -19,6 +19,7 @@ module.exports = {
         "purple-4": "#523CF5",
         "purple-7": "#523CF5",
         orange: "#F66854",
+        red: "#F2280C",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif", ...defaultTheme.fontFamily.sans],
