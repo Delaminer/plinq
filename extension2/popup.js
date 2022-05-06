@@ -1,7 +1,7 @@
 // Initialize button with user's preferred color
 let changeColor = document.getElementById("changeColor");
 
-chrome.storage.sync.get("color", ({ color }) => {
+chrome.storage.local.get("color", ({ color }) => {
   changeColor.style.backgroundColor = color;
 });
 
@@ -18,7 +18,7 @@ changeColor.addEventListener("click", async () => {
   // The body of this function will be executed as a content script inside the
   // current page
   function setPageBackgroundColor() {
-    chrome.storage.sync.get("color", ({ color }) => {
+    chrome.storage.local.get("color", ({ color }) => {
       document.body.style.backgroundColor = color;
     });
   }
