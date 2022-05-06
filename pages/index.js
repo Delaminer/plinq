@@ -36,6 +36,9 @@ const defaultData = {
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
       contactInterval: 7,
+      website: 'mywebsite.com',
+      interests: ['Coffee', 'Travel'],
+      notes: ['Has been working on B2B products for 7 years.', 'Previously at Cisco and Logitech as a Service Designer.'],
     },
     {
       firstName: "Mr",
@@ -43,7 +46,7 @@ const defaultData = {
       linkedIn: `https://www.linkedin.com/in/michael-peng-0a669617b/`,
       email: "contact@cool.com",
       phone: '555-666-7788',
-      website: 'https://linkedin.profile.me'
+      website: 'https://linkedin.profile.me',
     },
   ],
   templates: [
@@ -102,7 +105,7 @@ export default function Home() {
   // Get data from storage
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync) {
-      window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
+      window.addEventListener('hashchange', () => setWindowHash(window.location.hash));
       const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
       setState(savedData);
       setSavedState(savedData);
@@ -113,10 +116,22 @@ export default function Home() {
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.sync && state != savedState) {
       // We have unsaved changes. Save them!
-      await chrome.storage.sync.set({"plinq": state});
+      await chrome.storage.sync.set({ "plinq": state });
       setSavedState(state);
     }
   }, [state]);
+
+  // Helper function used in managing contact data
+  const followup = contact => {
+    // Find the contact
+    const index = state.contacts.indexOf(contact);
+    if (index == -1) return;
+
+    const last = new Date();
+    last.setHours(0, 0, 0, 0);
+    state.contacts[index] = { ...contact, lastContact: last.toString(), contactInterval: 14 };
+    setState({ ...state });
+  };
 
   return (
     <React.Fragment>
@@ -135,20 +150,12 @@ export default function Home() {
           <Tab
             hash={windowHash}
             path="#follow-up"
-            element={<Reminders
-              contacts={state.contacts}
-              followup={contact => {
-                // Find the contact
-                const index = state.contacts.indexOf(contact);
-                if (index == -1) return;
-
-                const last = new Date();
-                last.setHours(0, 0, 0, 0); // We just want the day, not the time
-                // Modify this contact
-                state.contacts[index] = {... contact, lastContact: last.toString()};
-                // Unpack the state object to force a reload
-                setState({...state});
-              }}/>}
+            element={
+              <Reminders
+                contacts={state.contacts}
+                followup={followup}
+              />
+            }
           ></Tab>
           <Tab
             hash={windowHash}
@@ -157,16 +164,7 @@ export default function Home() {
               <Networks
                 contacts={state.contacts}
                 sort={(a, b) => a.lastName.localeCompare(b.lastName)}
-                setFollowup={contact => {
-                  // Find the contact
-                  const index = state.contacts.indexOf(contact);
-                  if (index == -1) return;
-
-                  const last = new Date();
-                  last.setHours(0, 0, 0, 0);
-                  state.contacts[index] = {... contact, lastContact: last.toString(), contactInterval: 14};
-                  setState({...state});
-                }}
+                followup={followup}
               />
             }
           ></Tab>

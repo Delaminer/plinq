@@ -2,49 +2,25 @@ import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import { BsCheck, BsCheck2, BsFillCircleFill } from "react-icons/bs";
+import { calculateNextContact, sortDates, nameText } from "./tools"
 
-const calculateNextContact = (last, interval) => {
-  last.setDate(last.getDate() + interval);
-  return last;
-}
-
-const sort = (a, b) => 
-  (new Date(a.lastContact).getTime() + a.contactInterval * 24 * 60 * 60 * 1000) - 
-  (new Date(b.lastContact).getTime() + b.contactInterval * 24 * 60 * 60 * 1000);
-
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dev",
-];
-
-// Display a date object as Jan 1
-const nameText = (date) => `${months[date.getMonth()]} ${date.getDate()}`;
 // Get the color to use based on a date
-const colorTime = (date) => 
+const colorTime = (date) =>
   (new Date().getTime() - date.getTime() > 0) ? "fill-red-1" : "fill-green-1";
 
 // Convert an email, subject, and message into a link that generates this draft email
-const emailLink = (email, subject, body) => 
-`mailto:${email}?subject=${subject.replaceAll('\n', '%0A').replaceAll(' ', '%20')}&body=${body.replaceAll('\n', '%0A').replaceAll(' ', '%20')}`;
+const emailLink = (email, subject, body) =>
+  `mailto:${email}?subject=${subject.replaceAll('\n', '%0A').replaceAll(' ', '%20')}&body=${body.replaceAll('\n', '%0A').replaceAll(' ', '%20')}`;
 
 // Get the link to start a follow up email to a given contact
 const followupLink = (contact) => emailLink(contact.email, 'Hello there!', `How are you, ${contact.firstName}?\nI hope you are doing well.\n\nBest,\nYour Name`);
 
-export default function Reminders({ contacts }) {
+export default function Reminders({ contacts, followup }) {
   // console.log(colorTime(new Date(contacts[1].nextContact)))
   return (
     <div className="pt-9">
-      {contacts.filter(c => c.lastContact != undefined && c.contactInterval).sort(sort).map((contact) => (
+      {/* Only display contacts that are set up to receive reminders (have an existing last contact and a desired cotnact interval) */}
+      {contacts.filter(c => c.lastContact != undefined && c.contactInterval).sort(sortDates).map((contact) => (
         <div
           key={contact.lastName + contact.firstName}
           className="inline-block bg-white rounded-2xl shadow-md p-6"

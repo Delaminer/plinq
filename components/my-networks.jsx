@@ -4,9 +4,10 @@ import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import ContactEditor from "../components/contactEditor";
 
-export default function Networks({ contacts, sort, setFollowup }) {
+export default function Networks({ contacts, sort, followup }) {
+
   const [showForm, setShowForm] = useState(false);
-  const [currentContact, selectContact] = useState(null);
+  const [currentContact, selectContact] = useState(-1);
 
   return (
     <div className="networks">
@@ -37,7 +38,7 @@ export default function Networks({ contacts, sort, setFollowup }) {
         </button>
       </div>
       <div className="grid grid-cols-4 gap-5">
-        {contacts.sort(sort).map((contact) => (
+        {contacts.sort(sort).map((contact, index) => (
           <div
             key={contact.lastName + contact.firstName}
             className="inline-block bg-white rounded-2xl shadow-md p-6"
@@ -71,8 +72,8 @@ export default function Networks({ contacts, sort, setFollowup }) {
               </div>
               <div className="ml-auto mt-1">
                 <CgArrowsExpandRight size={25} className="cursor-pointer"
-                  onClick={() => selectContact(contact)}
-                  // onClick={() => setFollowup(contact)}
+                  onClick={() => selectContact(index)}
+                // onClick={() => followup(contact)}
                 />
               </div>
             </div>
@@ -99,10 +100,11 @@ export default function Networks({ contacts, sort, setFollowup }) {
           </div>
         ))}
       </div>
-      {currentContact != null && (
+      {currentContact != -1 && (
         <ContactEditor
-          contact={currentContact}
-          close={() => selectContact(null)}
+          contact={contacts[currentContact]}
+          close={() => selectContact(-1)}
+          followup={followup}
         />
       )}
     </div>
