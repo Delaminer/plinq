@@ -21,17 +21,20 @@ function sidebarHtml(contacts, existingIds) {
       <input class="artdeco-text-input--search artdeco-text-input--input" placeholder="Search by name..." type="search" id="plinq-control-search">
     </div>
     <button class="artdeco-button" style="margin:16px;align-self:flex-end" id="plinq-control-select-all">Add/Update All</button>
-    <div>` + contacts.filter(it => it != undefined).map(ct => `<div style="display: flex; align-items:center;background-color:var(--color-background-container)!important; border-radius: 8px; margin: 4px; padding: 8px;">
+    <div class="plinq-add-all-progress" style="align-self:center;display:none;flex:2 0 4px;overflow:hidden;border-radius:2px;background:var(--color-brand-accent-5-on-dark);width:100%;position:relative">
+      <div id="plinq-add-all-progress-bar" style="height:100%;align-self:center;position:absolute;left:0;top:0;width:30%;background:var(--color-action);transition:width 0.05s ease;"></div>
+    </div>
+    <em class="plinq-add-all-progress" id="plinq-add-all-progress-state" style="text-align:center;display:none;">Adding contacts...</em>
+    <div>` + contacts.filter(it => it != undefined).map(ct => `<div id="plinq-user-block-${ct.publicIdentifier}" style="display: flex; align-items:center;background-color:var(--color-background-container)!important; border-radius: 8px; margin: 4px; padding: 8px;">
       <img style="width:50px;border-radius:25px;" class="${extractProfilePictureUrl(ct) == null ? 'ghost-person' : ''}" src="${extractProfilePictureUrl(ct) || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}" alt="profile picture for ${ct.firstName} ${ct.lastName}">
       <div style="margin-left:8px">
         <p class="t-16 t-normal t-bold">${ct.firstName} ${ct.lastName}</p>
       </div>
-      <div style="margin-left: auto;display:flex;align-items:center;">
+      <div style="margin-left:auto;display:flex;align-items:center;">
         <button class="artdeco-button plinq-control-toggle-user" data-user="${ct.publicIdentifier}">${existingIds.includes(ct.publicIdentifier) ? 'Update' : 'Add'}</button>
       </div>
     </div>`).join('') + `</div>`;
-  return `
-  <aside style="position:fixed;top:20px;right:20px;bottom:20px;border-radius:1rem;background:var(--color-background-canvas)!important;border:2px solid #999;box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);padding:12px;z-index:10000000;overflow:scroll;display:flex;flex-direction:column;" id="plinq-importer">
+  return `<aside style="position:fixed;top:20px;right:20px;bottom:20px;min-width:350px;border-radius:1rem;background:var(--color-background-canvas)!important;border:2px solid #999;box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);padding:12px;z-index:10000000;overflow:scroll;display:flex;flex-direction:column;" id="plinq-importer">
     ${body}
   </aside>`;
 }
@@ -91,7 +94,10 @@ async function injectSidebar(contacts) {
     }
   });
   document.getElementById('plinq-control-search').addEventListener('input', (evt) => {
-    console.log(evt.value);
+    for (const ct of contacts) {
+      const include = `${ct.firstName} ${ct.lastName}`.toLowerCase().includes(evt.target.value.toLowerCase());
+      document.getElementById(`plinq-user-block-${ct.publicIdentifier}`).style.display = include ? 'flex' : 'none';
+    }
   });
   for (const elem of Array.from(document.getElementsByClassName('plinq-control-toggle-user')))
     elem.addEventListener('click', async (evt) => {
@@ -109,6 +115,40 @@ async function injectSidebar(contacts) {
         alert(e);
       }
     });
+
+  function showAddAllProgress(prog) {
+    for (const elem of document.getElementsByClassName('plinq-control-toggle-user')) elem.disabled = true;
+    for (const elem of document.getElementsByClassName('plinq-add-all-progress')) elem.style.display = 'block';
+    document.getElementById('plinq-add-all-progress-bar').style.width = `${prog*100}%`;
+    document.getElementById('plinq-add-all-progress-state').innerText = prog == 1 ? 'Done!' : 'Adding contacts...';
+  }
+  function hideAddAllProgress(added) {
+    for (const elem of document.getElementsByClassName('plinq-control-toggle-user')) elem.disabled = added.includes(elem.getAttribute('data-user'));
+    for (const elem of document.getElementsByClassName('plinq-add-all-progress')) elem.style.display = 'none';
+  }
+  async function addAllContacts() {
+    const contactInfos = [];
+    try {
+      for (const ct of contacts) {
+        const details = mapById[ct.publicIdentifier];
+        details.contactInfo = await api.fetchContactInfo(ct.publicIdentifier);
+        contactInfos.push(details);
+        showAddAllProgress(contactInfos.length / contacts.length);
+        await new Promise(res => setTimeout(res, 250));
+      }
+      await storage.upsert(contactInfos);
+      hideAddAllProgress(Object.keys(mapById));
+    } catch (e) {
+      alert(e);
+      hideAddAllProgress([]);
+    }
+  }
+
+  const selectAll = document.getElementById('plinq-control-select-all');
+  selectAll.addEventListener('click', () => {
+    selectAll.disabled = true;
+    addAllContacts();
+  });
 }
 
 class LinkedInApi {

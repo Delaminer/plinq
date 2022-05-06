@@ -14,7 +14,7 @@ let baseData = {
 // Initialize the database for a new user
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ 'plinq': baseData });
+  chrome.storage.local.set({ 'plinq': baseData });
   console.log('Initialized Plinq database!');
 });
 
@@ -39,9 +39,9 @@ chrome.runtime.onMessage.addListener((msg, sender, respond) => {
   if (msg.module === 'liImport') {
     if (msg.topic === 'enabled?') {
       async function res() {
-        const enabled = (await chrome.storage.sync.get('liImporting')).liImporting;
+        const enabled = (await chrome.storage.local.get('liImporting')).liImporting;
         if (enabled) {
-          await chrome.storage.sync.set({liImporting: false});
+          await chrome.storage.local.set({liImporting: false});
         }
         respond({value: enabled});
         console.info('responded with', {value:enabled});
@@ -50,7 +50,7 @@ chrome.runtime.onMessage.addListener((msg, sender, respond) => {
       return true;
     } else if (msg.topic === 'existing?') {
       async function res() {
-        const store = (await chrome.storage.sync.get('plinq')).plinq;
+        const store = (await chrome.storage.local.get('plinq')).plinq;
         const out = [];
         for (let i = 0; i < msg.query.length; ++i) {
           if (store.contacts.some(ct => ct.linkedIn === 'https://www.linkedin.com/in/' + encodeURIComponent(msg.query[i]))) {
@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener((msg, sender, respond) => {
       return true;
     } else if (msg.topic === 'upsert') {
       async function res() {
-        const store = (await chrome.storage.sync.get('plinq')).plinq;
+        const store = (await chrome.storage.local.get('plinq')).plinq;
         const updatingLinkedInUrls = new Set();
         for (const item of msg.items) {
           if (item.linkedIn) {
@@ -73,7 +73,7 @@ chrome.runtime.onMessage.addListener((msg, sender, respond) => {
         const newStore = store.contacts
           .filter(ct => ct.linkedIn == undefined || !updatingLinkedInUrls.has(ct.linkedIn))
           .concat(msg.items);
-        await chrome.storage.sync.set({plinq: {...store, contacts: newStore}});
+        await chrome.storage.local.set({plinq: {...store, contacts: newStore}});
         respond({status: 'ok'});
       }
       res();

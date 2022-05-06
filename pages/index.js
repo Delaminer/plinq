@@ -104,9 +104,9 @@ export default function Home() {
 
   // Get data from storage
   useEffect(async () => {
-    if (chrome && chrome.storage && chrome.storage.sync) {
-      window.addEventListener('hashchange', () => setWindowHash(window.location.hash));
-      const savedData = { ...state, ...(await chrome.storage.sync.get("plinq")).plinq };
+    if (chrome && chrome.storage && chrome.storage.local) {
+      window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
+      const savedData = { ...state, ...(await chrome.storage.local.get("plinq")).plinq };
       setState(savedData);
       setSavedState(savedData);
     }
@@ -114,9 +114,9 @@ export default function Home() {
 
   // Save new data to storage
   useEffect(async () => {
-    if (chrome && chrome.storage && chrome.storage.sync && state != savedState) {
+    if (chrome && chrome.storage && chrome.storage.local && state != savedState) {
       // We have unsaved changes. Save them!
-      await chrome.storage.sync.set({ "plinq": state });
+      await chrome.storage.local.set({"plinq": state});
       setSavedState(state);
     }
   }, [state]);
