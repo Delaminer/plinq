@@ -16,12 +16,12 @@ function handleButtonClick(event) {
   // Mark the button as selected
   let color = event.target.dataset.color;
   event.target.classList.add(selectedClassName);
-  chrome.storage.sync.set({ color });
+  chrome.storage.local.set({ color });
 }
 
 // Add a button to the page for each supplied color
 function constructOptions(buttonColors) {
-  chrome.storage.sync.get("color", (data) => {
+  chrome.storage.local.get("color", (data) => {
     let currentColor = data.color;
     // For each color we were provided…
     for (let buttonColor of buttonColors) {

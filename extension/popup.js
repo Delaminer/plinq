@@ -14,7 +14,7 @@ setupLink('goto-templates', 'index.html#templates');
 
 // Goto Linkedin button: Open a new tab to the specified linkedin link
 document.querySelector('#goto-linkedin').addEventListener('click', async () => {
-  await chrome.storage.sync.set({'liImporting': true});
+  await chrome.storage.local.set({'liImporting': true});
   let tab = await chrome.tabs.create({
     active: true,
     url: 'https://www.linkedin.com/mynetwork/invite-connect/connections/'
