@@ -2,9 +2,11 @@ import { useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
+import ContactEditor from "../components/contactEditor";
 
 export default function Networks({ contacts, sort, setFollowup }) {
   const [showForm, setShowForm] = useState(false);
+  const [currentContact, selectContact] = useState(null);
 
   return (
     <div className="networks">
@@ -69,7 +71,8 @@ export default function Networks({ contacts, sort, setFollowup }) {
               </div>
               <div className="ml-auto mt-1">
                 <CgArrowsExpandRight size={25} className="cursor-pointer"
-                  onClick={() => setFollowup(contact)}
+                  onClick={() => selectContact(contact)}
+                  // onClick={() => setFollowup(contact)}
                 />
               </div>
             </div>
@@ -96,6 +99,12 @@ export default function Networks({ contacts, sort, setFollowup }) {
           </div>
         ))}
       </div>
+      {currentContact != null && (
+        <ContactEditor
+          contact={currentContact}
+          close={() => selectContact(null)}
+        />
+      )}
     </div>
   );
 }
