@@ -74,7 +74,6 @@ export default function Networks({ contacts, sort, followup, addContact, editCon
               <div className="ml-auto mt-1">
                 <CgArrowsExpandRight size={25} className="cursor-pointer"
                   onClick={() => selectContact(index)}
-                // onClick={() => followup(contact)}
                 />
               </div>
             </div>

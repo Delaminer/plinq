@@ -8,6 +8,9 @@ export default function ContactForm({ onSubmit, close }) {
     <div className="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-20 flex items-center justify-center">
       <div className="inline-block bg-white rounded-2xl shadow-md p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="w-450 flex flex-col gap-y-4">
+          <div className="flex flex-row text-2xl font-semibold">
+            Add a new network
+          </div>
           <div className="flex flex-row gap-4">
             <input
               {...register("firstName", { required: true })}
