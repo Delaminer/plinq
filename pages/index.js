@@ -132,6 +132,16 @@ export default function Home() {
     state.contacts[index] = { ...contact, lastContact: last.toString(), contactInterval: 14 };
     setState({ ...state });
   };
+  // Helper function used in creating a new contact
+  const addContact = contact => {
+    state.contacts.push(contact);
+    // setState({ ...state });
+  }
+  // Helper function used in editing an existing contact
+  const editContact = (index, contact) => {
+    state.contacts[index] = contact;
+    // setState({ ...state });
+  }
 
   return (
     <React.Fragment>
@@ -165,6 +175,8 @@ export default function Home() {
                 contacts={state.contacts}
                 sort={(a, b) => a.lastName.localeCompare(b.lastName)}
                 followup={followup}
+                addContact={addContact}
+                editContact={editContact}
               />
             }
           ></Tab>

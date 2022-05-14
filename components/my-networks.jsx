@@ -3,8 +3,9 @@ import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import ContactEditor from "../components/contactEditor";
+import ContactForm from "../components/contactForm";
 
-export default function Networks({ contacts, sort, followup }) {
+export default function Networks({ contacts, sort, followup, addContact, editContact }) {
 
   const [showForm, setShowForm] = useState(false);
   const [currentContact, selectContact] = useState(-1);
@@ -105,6 +106,23 @@ export default function Networks({ contacts, sort, followup }) {
           contact={contacts[currentContact]}
           close={() => selectContact(-1)}
           followup={followup}
+        />
+      )}
+      {showForm && (
+        <ContactForm
+          onSubmit={contact => {
+            // Remove invalid data from the contact form
+            for (let key in contact) {
+              if (!contact[key] || contact[key] === "") {
+                delete contact[key];
+              }
+            }
+            // Add the contact
+            addContact(contact);
+            // Close the form
+            setShowForm(false);
+          }}
+          close={() => setShowForm(false)}
         />
       )}
     </div>
