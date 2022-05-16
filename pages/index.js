@@ -1,6 +1,6 @@
 import Reminders from "../components/follow-up";
 import Networks from "../components/my-networks";
-import Templates from '../components/templates';
+import Templates from "../components/templates";
 import { useEffect, useState } from "react";
 import React from "react";
 
@@ -36,17 +36,17 @@ const defaultData = {
       email: "alexson@umich.com",
       lastContact: "March 20, 2022 00:00:00",
       contactInterval: 7,
-      website: 'mywebsite.com',
-      interests: ['Coffee', 'Travel'],
-      notes: ['Has been working on B2B products for 7 years.', 'Previously at Cisco and Logitech as a Service Designer.'],
+      website: "mywebsite.com",
+      interests: ["Coffee", "Travel"],
+      notes: ["Has been working on B2B products for 7 years.", "Previously at Cisco and Logitech as a Service Designer."],
     },
     {
       firstName: "Mr",
       lastName: "LinkedIn",
       linkedIn: `https://www.linkedin.com/in/michael-peng-0a669617b/`,
       email: "contact@cool.com",
-      phone: '555-666-7788',
-      website: 'https://linkedin.profile.me',
+      phone: "555-666-7788",
+      website: "https://linkedin.profile.me",
     },
   ],
   templates: [
@@ -105,7 +105,7 @@ export default function Home() {
   // Get data from storage
   useEffect(async () => {
     if (chrome && chrome.storage && chrome.storage.local) {
-      window.addEventListener('hashchange',  () => setWindowHash(window.location.hash));
+      window.addEventListener("hashchange",  () => setWindowHash(window.location.hash));
       const savedData = { ...state, ...(await chrome.storage.local.get("plinq")).plinq };
       setState(savedData);
       setSavedState(savedData);
@@ -132,6 +132,38 @@ export default function Home() {
     state.contacts[index] = { ...contact, lastContact: last.toString(), contactInterval: 14 };
     setState({ ...state });
   };
+
+  // Helper function used in creating a new contact
+  const addContact = contact => {
+    state.contacts.push({});
+    editContact(state.contacts.length - 1, contact)
+  };
+
+  // Helper function used in editing an existing contact
+  const editContact = (index, contact) => {
+    // Modify the contact data:
+
+    // Remove invalid data from the contact form
+    for (let key in contact) {
+      if (!contact[key] || contact[key] === "") {
+        delete contact[key];
+      }
+    }
+    // Extract data from interests as a string
+    if (typeof contact.interests === "string") contact.interests = contact.interests.split(",");
+    // Remove excess spaces and delete blank entries
+    contact.interests = contact.interests.map(interest => interest.trim()).filter(interest => interest.length > 0);
+
+    state.contacts[index] = contact;
+    setState({ ...state });
+  };
+
+  const deleteContact = index => {
+    if (index > -1) {
+      state.contacts.splice(index, 1);
+    }
+    setState({ ...state });
+  }
 
   return (
     <React.Fragment>
@@ -165,6 +197,9 @@ export default function Home() {
                 contacts={state.contacts}
                 sort={(a, b) => a.lastName.localeCompare(b.lastName)}
                 followup={followup}
+                addContact={addContact}
+                editContact={editContact}
+                deleteContact={deleteContact}
               />
             }
           ></Tab>

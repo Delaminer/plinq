@@ -2,7 +2,7 @@
 
 // Get a Date object of when the next contact should be based on the last contact and contact interval
 export const calculateNextContact = (last, interval) => {
-    last.setDate(last.getDate() + interval);
+    last.setUTCDate(last.getUTCDate() + interval);
     return last;
 }
 
@@ -28,4 +28,6 @@ export const months = [
 ];
 
 // Display a date object as 'Jan 1'
-export const nameText = (date) => `${months[date.getMonth()]} ${date.getDate()}`;
+export const displayDate = (date) => `${months[date.getUTCMonth()]} ${date.getUTCDate()}`;
+// Display a date object as '2022-01-31'
+export const displayDate2 = (date) => date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1).toString().padStart(2, "0") + "-" + date.getUTCDate().toString().padStart(2, "0");

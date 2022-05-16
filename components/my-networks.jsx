@@ -3,11 +3,13 @@ import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import ContactEditor from "../components/contactEditor";
+import ContactForm from "../components/contactForm";
 
-export default function Networks({ contacts, sort, followup }) {
+export default function Networks({ contacts, sort, followup, addContact, editContact, deleteContact }) {
 
   const [showForm, setShowForm] = useState(false);
   const [currentContact, selectContact] = useState(-1);
+
 
   return (
     <div className="networks">
@@ -56,11 +58,10 @@ export default function Networks({ contacts, sort, followup }) {
                 <p key="name" className="font-bold text-2xl">
                   {contact.firstName} {contact.lastName}
                 </p>
-                {contact.job && (
-                  <p key="job" className="text-gray-4">
-                    {contact.job} @ {contact.company}
-                  </p>
-                )}
+                <p key="job" className="text-gray-4">
+                  {/* Only display what information is defined (with filter), and only add @ if there are multiple fields */}
+                  {[contact.job, contact.company].filter(field => field).join(' @ ')}
+                </p>
                 <div className="flex flex-row gap-2 mt-2">
                   <div className="bg-purple-3/20 rounded-2xl px-3 py-1 text-purple-3 text-sm font-semibold">
                     B2B
@@ -73,7 +74,6 @@ export default function Networks({ contacts, sort, followup }) {
               <div className="ml-auto mt-1">
                 <CgArrowsExpandRight size={25} className="cursor-pointer"
                   onClick={() => selectContact(index)}
-                // onClick={() => followup(contact)}
                 />
               </div>
             </div>
@@ -105,6 +105,19 @@ export default function Networks({ contacts, sort, followup }) {
           contact={contacts[currentContact]}
           close={() => selectContact(-1)}
           followup={followup}
+          setContact={contact => editContact(currentContact, contact)}
+          deleteContact={() => deleteContact(currentContact)}
+        />
+      )}
+      {showForm && (
+        <ContactForm
+          onSubmit={contact => {
+            // Add the contact
+            addContact(contact);
+            // Close the form
+            setShowForm(false);
+          }}
+          close={() => setShowForm(false)}
         />
       )}
     </div>
