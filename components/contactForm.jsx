@@ -51,7 +51,7 @@ export default function ContactForm({ onSubmit, close }) {
           </div>
           <div className="flex flex-row">
             <input
-              {...register("LinkedIn URL")}
+              {...register("linkedIn")}
               placeholder={"Website link"}
               className="border border-black rounded-lg p-4 w-full placeholder:text-black"
             />
@@ -80,7 +80,7 @@ export default function ContactForm({ onSubmit, close }) {
               />
             </div>
             <input
-              {...register("interval", { valueAsNumber: true })}
+              {...register("contactInterval", { valueAsNumber: true })}
               placeholder={"Interval (Days)"}
               className="border border-black rounded-lg p-4 w-1/2 placeholder:text-black"
             />
