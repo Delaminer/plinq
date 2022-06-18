@@ -4,7 +4,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { GiClockwiseRotation } from "react-icons/gi";
 import { BsFillTrashFill } from "react-icons/bs"
-import { FiLink } from "react-icons/fi";
+import { FiLink, FiPlus } from "react-icons/fi";
 import { calculateNextContact, displayDate, displayDate2 } from "./tools"
 import { Controller, useForm } from "react-hook-form";
 
@@ -13,12 +13,12 @@ export default function ContactEditor({ contact, close, followup, setContact, de
   if (!contact.interests) contact.interests = [];
   if (!contact.notes) contact.notes = [];
 
-  const { control, register, handleSubmit } = useForm({ defaultValues: contact});
+  const { control, register, handleSubmit } = useForm({ defaultValues: contact });
   const [editing, setEditState] = useState(false);
 
   return (
-    <div className="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-20 flex items-center justify-center">
-      <div className="inline-block bg-white rounded-2xl shadow-md p-6">
+    <div className="fixed top-0 bottom-0 left-0 right-0 bg-black bg-opacity-20 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col gap-3" style={{maxWidth: '80%'}}>
         <div className="flex flex-row">
           <div className="mr-6 my-3">
             <img
@@ -65,7 +65,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
             <CgClose size={25} className="cursor-pointer" onClick={close} />
           </div>
         </div>
-        <div className="bg-gray-2 h-[1px] my-4" />
+        <div className="bg-gray-2 h-[1px]" />
         <div className="flex flex-row gap-10">
           <div className="flex flex-col gap-1">
             <p className="text-sm font-bold text-gray-3">Info</p>
@@ -102,7 +102,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
               }
             </div>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap">
             <p className="text-sm font-bold text-gray-3">Contact</p>
             {
               (contact.lastContact != undefined && contact.contactInterval) ? (
@@ -170,11 +170,11 @@ export default function ContactEditor({ contact, close, followup, setContact, de
           </div>
         </div>
 
-        {(contact.interests.length > 0 || editing) && (
+        {(contact.interests.length > 0 || editing) ? (
           <div className="flex flex-row">
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col">
               <p className="text-sm font-bold text-gray-3">Interest</p>
-              <div className="flex flex-row gap-2 mt-2">
+              <div className="flex flex-row flex-wrap gap-2 text-sm mt-1">
                 {editing ? (
                     <Controller
                       control={control}
@@ -183,22 +183,23 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                         <>
                           {field.value.map((interest, index) => (
                             <div key={index}
-                              className="bg-gray-4/20 rounded-2xl px-3 py-1 text-gray-4 text-sm font-semibold flex items-center justify-center"
+                              className="bg-gray-4/20 rounded-2xl px-3 py-1 text-gray-4 font-semibold flex items-center justify-center"
                             >
-                              <input type="text" value={field.value[index]} onChange={event => {
+                              <input type="text" className="border-gray-400 px-1 border rounded-md" value={field.value[index]} onChange={event => {
                                 field.value[index] = event.target.value;
                                 field.onChange(field.value);
                                 }}
                               />
-                              <button className="ml-2 bg-red text-black p-1 rounded-lg"
+                              <button type="button" className="ml-2 text-red rounded-lg"
                                 onClick={() => field.onChange(field.value.filter((_, otherIndex) => otherIndex != index))}
                               ><BsFillTrashFill /></button>
                             </div>
                           ))}
                           <button
-                            className="px-4 border-2 border-purple-4 bg-purple-4 rounded-lg text-white h-12 font-semibold text-base"
+                            className="px-3 py-1 border-2 border-purple-4 bg-purple-4 gap-1 rounded-lg text-white font-semibold flex justify-between align-middle"
                             onClick={() => field.onChange([...field.value, ""])}
                           >
+                            <FiPlus size={20} />
                             New
                           </button>
                         </>
@@ -215,13 +216,13 @@ export default function ContactEditor({ contact, close, followup, setContact, de
               </div>
             </div>
           </div>
-        )}
+        ) : null}
 
-        {(contact.notes.length > 0 || editing) && (
-          <div className="flex flex-row">
+        {(contact.notes.length > 0 || editing) ? (
+          <div>
             <div className="flex flex-col gap-1">
               <p className="text-sm font-bold text-gray-3">Notes</p>
-              <div>
+              <div className="w-full">
                 {
                   !editing ? (
                     contact.notes.map((note, index) => (
@@ -234,9 +235,9 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                       control={control}
                       name="notes"
                       render={({ field }) => (
-                        <textarea cols={50} rows={field.value.length + 1} 
-                          onChange={event => field.onChange(event.target.value.split("\n"))}
-                          className="border border-black rounded-md"
+                        <textarea rows={field.value.length + 1} 
+                          onChange={event => field.onChange(event.target.value.trim().length > 0 ? event.target.value.trim().split("\n") : [])}
+                          className="border border-black rounded-md w-full px-1"
                           value={field.value.join("\n")}
                         />
                       )}
@@ -246,9 +247,9 @@ export default function ContactEditor({ contact, close, followup, setContact, de
               </div>
             </div>
           </div>
-        )}
+        ) : null}
 
-        <div className="flex flex-row gap-2 mt-2 float-right">
+        <div className="flex gap-2 justify-end">
           {
             editing ? (
               <button
