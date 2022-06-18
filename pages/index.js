@@ -38,7 +38,10 @@ const defaultData = {
       contactInterval: 7,
       website: "mywebsite.com",
       interests: ["Coffee", "Travel"],
-      notes: ["Has been working on B2B products for 7 years.", "Previously at Cisco and Logitech as a Service Designer."],
+      notes: [
+        "Has been working on B2B products for 7 years.",
+        "Previously at Cisco and Logitech as a Service Designer.",
+      ],
     },
     {
       firstName: "Mr",
@@ -92,51 +95,72 @@ const NavItem = ({ hash, to, children }) => {
 };
 
 const Tab = ({ hash, path, element }) => {
-  return <>
-    {hash === path ? element : null}
-  </>;
-}
+  return <>{hash === path ? element : null}</>;
+};
 
 export default function Home() {
   const [state, setState] = useState(defaultData);
-  const [windowHash, setWindowHash] = useState(window.location.hash);
+  const [windowHash, setWindowHash] = useState("");
   const [savedState, setSavedState] = useState({});
 
-  // Get data from storage
-  useEffect(async () => {
-    if (chrome && chrome.storage && chrome.storage.local) {
-      window.addEventListener("hashchange",  () => setWindowHash(window.location.hash));
-      const savedData = { ...state, ...(await chrome.storage.local.get("plinq")).plinq };
-      setState(savedData);
-      setSavedState(savedData);
-    }
+  useEffect(() => {
+    // Set default window hash
+    setWindowHash(window.location.hash);
+
+    // Get data from storage
+    const getData = async () => {
+      if (chrome && chrome.storage && chrome.storage.local) {
+        window.addEventListener("hashchange", () =>
+          setWindowHash(window.location.hash)
+        );
+        const savedData = {
+          ...state,
+          ...(await chrome.storage.local.get("plinq")).plinq,
+        };
+        setState(savedData);
+        setSavedState(savedData);
+      }
+    };
+    getData();
   }, []);
 
   // Save new data to storage
-  useEffect(async () => {
-    if (chrome && chrome.storage && chrome.storage.local && state != savedState) {
-      // We have unsaved changes. Save them!
-      await chrome.storage.local.set({"plinq": state});
-      setSavedState(state);
-    }
+  useEffect(() => {
+    const saveData = async () => {
+      if (
+        chrome &&
+        chrome.storage &&
+        chrome.storage.local &&
+        state != savedState
+      ) {
+        // We have unsaved changes. Save them!
+        await chrome.storage.local.set({ plinq: state });
+        setSavedState(state);
+      }
+    };
+    saveData();
   }, [state]);
 
   // Helper function used in managing contact data
-  const followup = contact => {
+  const followup = (contact) => {
     // Find the contact
     const index = state.contacts.indexOf(contact);
     if (index == -1) return;
 
     const last = new Date();
     last.setHours(0, 0, 0, 0);
-    state.contacts[index] = { ...contact, lastContact: last.toString(), contactInterval: 14 };
+    state.contacts[index] = {
+      ...contact,
+      lastContact: last.toString(),
+      contactInterval: 14,
+    };
     setState({ ...state });
   };
 
   // Helper function used in creating a new contact
-  const addContact = contact => {
+  const addContact = (contact) => {
     state.contacts.push({});
-    editContact(state.contacts.length - 1, contact)
+    editContact(state.contacts.length - 1, contact);
   };
 
   // Helper function used in editing an existing contact
@@ -150,43 +174,50 @@ export default function Home() {
       }
     }
     // Extract data from interests as a string
-    if (typeof contact.interests === "string") contact.interests = contact.interests.split(",");
+    if (typeof contact.interests === "string")
+      contact.interests = contact.interests.split(",");
     // Remove excess spaces and delete blank entries
-    contact.interests = contact.interests.map(interest => interest.trim()).filter(interest => interest.length > 0);
+    contact.interests = contact.interests
+      .map((interest) => interest.trim())
+      .filter((interest) => interest.length > 0);
 
     state.contacts[index] = contact;
     setState({ ...state });
   };
 
-  const deleteContact = index => {
+  const deleteContact = (index) => {
     if (index > -1) {
       state.contacts.splice(index, 1);
     }
     setState({ ...state });
-  }
+  };
 
+  console.log("idnex");
   return (
-    <React.Fragment>
-      <header>
+    <div>
+      <div>
         <div className="pl-24 bg-white">
           <img src="/logo.svg" className="pt-2.5"></img>
         </div>
         <nav className="p-6 pl-12 bg-white flex w-screen">
-          <NavItem hash={windowHash} to="#follow-up">Follow-up</NavItem>
-          <NavItem hash={windowHash} to="#my-networks">My Networks</NavItem>
-          <NavItem hash={windowHash} to="#templates">Templates</NavItem>
+          <NavItem hash={windowHash} to="#follow-up">
+            Follow-up
+          </NavItem>
+          <NavItem hash={windowHash} to="#my-networks">
+            My Networks
+          </NavItem>
+          <NavItem hash={windowHash} to="#templates">
+            Templates
+          </NavItem>
         </nav>
-      </header>
+      </div>
       <main>
         <div className="pr-24 pl-24 bg-gray-1">
           <Tab
             hash={windowHash}
             path="#follow-up"
             element={
-              <Reminders
-                contacts={state.contacts}
-                followup={followup}
-              />
+              <Reminders contacts={state.contacts} followup={followup} />
             }
           ></Tab>
           <Tab
@@ -210,6 +241,6 @@ export default function Home() {
           ></Tab>
         </div>
       </main>
-    </React.Fragment>
+    </div>
   );
 }

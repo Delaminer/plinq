@@ -39,7 +39,7 @@ export default function Templates({ templates }) {
       </div>
       <div className="flex flex-row">
         {templates.map((template) => (
-          <div className="inline-block w-96 h-50 bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md">
+          <div key={template.name} className="inline-block w-96 h-50 bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md">
             <CgArrowsExpandRight
               className="cursor-pointer float-right"
               onClick={() => selectTemplate(template)}
