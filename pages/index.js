@@ -228,7 +228,6 @@ export default function Home() {
             element={
               <Networks
                 contacts={state.contacts}
-                sort={(a, b) => a.lastName.localeCompare(b.lastName)}
                 followup={followup}
                 addContact={addContact}
                 editContact={editContact}
