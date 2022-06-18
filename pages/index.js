@@ -82,10 +82,7 @@ const NavItem = ({ hash, to, children }) => {
   return (
     <a
       className={
-        "text-2xl ml-12" +
-        (isActive
-          ? " font-bold text-purple-4 underline underline-offset-8"
-          : " font-normal")
+        `text-2xl ${isActive ? "text-purple-4 underline underline-offset-8" : ""}`
       }
       href={to}
     >
@@ -109,10 +106,12 @@ export default function Home() {
 
     // Get data from storage
     const getData = async () => {
-      if (chrome && chrome.storage && chrome.storage.local) {
+      if (typeof window !== 'undefined') {
         window.addEventListener("hashchange", () =>
           setWindowHash(window.location.hash)
         );
+      }
+      if (chrome && chrome.storage && chrome.storage.local) {
         const savedData = {
           ...state,
           ...(await chrome.storage.local.get("plinq")).plinq,
@@ -195,11 +194,11 @@ export default function Home() {
   console.log("idnex");
   return (
     <div>
-      <div>
-        <div className="pl-24 bg-white">
+      <div className="bg-white">
+        <div className="pl-24">
           <img src="/logo.svg" className="pt-2.5"></img>
         </div>
-        <nav className="p-6 pl-12 bg-white flex w-screen">
+        <nav className="p-6 pl-24 flex flex-wrap gap-8">
           <NavItem hash={windowHash} to="#follow-up">
             Follow-up
           </NavItem>
@@ -212,7 +211,7 @@ export default function Home() {
         </nav>
       </div>
       <main>
-        <div className="pr-24 pl-24 bg-gray-1">
+        <div className="px-24 bg-gray-1">
           <Tab
             hash={windowHash}
             path="#follow-up"
