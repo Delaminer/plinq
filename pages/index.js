@@ -109,10 +109,12 @@ export default function Home() {
 
     // Get data from storage
     const getData = async () => {
-      if (chrome && chrome.storage && chrome.storage.local) {
+      if (typeof window !== 'undefined') {
         window.addEventListener("hashchange", () =>
           setWindowHash(window.location.hash)
         );
+      }
+      if (chrome && chrome.storage && chrome.storage.local) {
         const savedData = {
           ...state,
           ...(await chrome.storage.local.get("plinq")).plinq,
