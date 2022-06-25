@@ -229,7 +229,6 @@ export default function Home() {
     editTemplate(state.templates.length - 1, template);
   };
 
-<<<<<<< HEAD
   const editTemplate = (index, template) => {
     state.templates[index] = template;
     setState({ ...state });
@@ -242,8 +241,6 @@ export default function Home() {
     setState({ ...state });
   };
 
-=======
->>>>>>> e5d353f (Fix font size in extension)
   return (
     <div>
       <div className="bg-white">
