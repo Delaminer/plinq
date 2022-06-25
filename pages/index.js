@@ -4,7 +4,7 @@ import Templates from "../components/templates";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const TemplateType = {
+export const TemplateType = {
   coldEmail: {
     name: "COLD EMAIL",
     bg: "bg-orange/20",
@@ -59,13 +59,16 @@ const defaultData = {
       subject: "-",
       content:
         "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
+      lastEdited: "February 26, 2022 00:00:00",
     },
     {
       name: "Career Fair follow-up",
       type: TemplateType.followup,
       subject: "Nice meeting you, [Name]!",
       content:
-        "Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...",
+        "Hi [Name],\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
+        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
+        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses.",
     },
     {
       name: "Informational Interview Re..",
@@ -185,13 +188,24 @@ export default function Home() {
   };
 
   const deleteContact = (index) => {
-    if (index > -1) {
+    if (index > -1 && index < state.contacts.length) {
       state.contacts.splice(index, 1);
     }
     setState({ ...state });
   };
 
-  console.log("idnex");
+  const editTemplate = (index, template) => {
+    state.templates[index] = template;
+    setState({ ...state });
+  };
+
+  const deleteTemplate = (index) => {
+    if (index > -1 && index < state.templates.length) {
+      state.templates.splice(index, 1);
+    }
+    setState({ ...state });
+  };
+
   return (
     <div>
       <div className="bg-white">
@@ -236,7 +250,13 @@ export default function Home() {
           <Tab
             hash={windowHash}
             path="#templates"
-            element={<Templates templates={state.templates} />}
+            element={
+              <Templates
+                templates={state.templates}
+                editTemplate={editTemplate}
+                deleteTemplate={deleteTemplate}
+              />
+            }
           ></Tab>
         </div>
       </main>

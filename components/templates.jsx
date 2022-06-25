@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import TemplateEditor from "./templateEditor";
 
-const TypeIcon = ({ type }) => (
+export const TypeIcon = ({ type }) => (
   <p
-    className={`${type.bg} ${type.tc} text-sm font-semibold w-fit rounded-2xl px-2`}
+    className={`${type.bg} ${type.tc} inline-block text-sm font-semibold w-fit rounded-2xl px-2`}
   >
     {type.name}
   </p>
 );
 
-export default function Templates({ templates }) {
-  const [currentTemplate, selectTemplate] = useState(null);
+export default function Templates({ templates, editTemplate, deleteTemplate }) {
+  const [currentTemplate, selectTemplate] = useState(-1);
 
   return (
     <div className="templates">
@@ -38,11 +38,14 @@ export default function Templates({ templates }) {
         </button>
       </div>
       <div className="flex flex-row">
-        {templates.map((template) => (
-          <div key={template.name} className="inline-block w-96 h-50 bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md">
+        {templates.map((template, index) => (
+          <div
+            key={template.name}
+            className="inline-block w-96 h-60 max-h-60 overflow-hidden bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md"
+          >
             <CgArrowsExpandRight
               className="cursor-pointer float-right"
-              onClick={() => selectTemplate(template)}
+              onClick={() => selectTemplate(index)}
               size={25}
             />
             <p className="font-bold">{template.name}</p>
@@ -52,10 +55,12 @@ export default function Templates({ templates }) {
           </div>
         ))}
       </div>
-      {currentTemplate != null && (
+      {currentTemplate != -1 && (
         <TemplateEditor
-          template={currentTemplate}
-          close={() => selectTemplate(null)}
+          template={templates[currentTemplate]}
+          close={() => selectTemplate(-1)}
+          editTemplate={(template) => editTemplate(currentTemplate, template)}
+          deleteTemplate={() => deleteTemplate(currentTemplate)}
         />
       )}
     </div>

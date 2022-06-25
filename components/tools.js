@@ -31,3 +31,5 @@ export const months = [
 export const displayDate = (date) => `${months[date.getUTCMonth()]} ${date.getUTCDate()}`;
 // Display a date object as '2022-01-31'
 export const displayDate2 = (date) => date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1).toString().padStart(2, "0") + "-" + date.getUTCDate().toString().padStart(2, "0");
+// Display a date object as 'Jan 1, 2022'
+export const displayDate3 = (date) => `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
