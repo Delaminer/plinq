@@ -5,6 +5,7 @@
 body {
   background-color: #f9f9f9;
   font-family: Inter, sans-serif;
+  font-size: inherit;
 }
 
 @layer utilities {
