@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import TemplateEditor from "./templateEditor";
 
@@ -31,17 +31,17 @@ export default function Templates({ templates, editTemplate, deleteTemplate }) {
           <option value="finance">Cold Email</option>
         </select>
         <div className="flex items-center justify-center ml-auto h-12">
-          {templates.length} networks
+          {templates.length} templates
         </div>
         <button className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm">
           New
         </button>
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-wrap gap-5">
         {templates.map((template, index) => (
           <div
             key={template.name}
-            className="inline-block w-96 h-60 max-h-60 overflow-hidden bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md"
+            className="w-96 flex-none h-60 max-h-60 overflow-hidden bg-white p-5 rounded-2xl shadow-md"
           >
             <CgArrowsExpandRight
               className="cursor-pointer float-right"

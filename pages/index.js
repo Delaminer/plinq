@@ -54,7 +54,7 @@ const defaultData = {
   ],
   templates: [
     {
-      name: "LinkedIn Conection",
+      name: "LinkedIn Connection",
       type: TemplateType.coldEmail,
       subject: "-",
       content:
@@ -84,9 +84,9 @@ const NavItem = ({ hash, to, children }) => {
   const isActive = hash === to;
   return (
     <a
-      className={
-        `text-2xl ${isActive ? "text-purple-4 underline underline-offset-8" : ""}`
-      }
+      className={`text-2xl ${
+        isActive ? "text-purple-4 underline underline-offset-8" : ""
+      }`}
       href={to}
     >
       {children}
@@ -109,7 +109,7 @@ export default function Home() {
 
     // Get data from storage
     const getData = async () => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.addEventListener("hashchange", () =>
           setWindowHash(window.location.hash)
         );
@@ -194,7 +194,6 @@ export default function Home() {
     setState({ ...state });
   };
 
-<<<<<<< HEAD
   const editTemplate = (index, template) => {
     state.templates[index] = template;
     setState({ ...state });
@@ -207,8 +206,6 @@ export default function Home() {
     setState({ ...state });
   };
 
-=======
->>>>>>> e5d353f (Fix font size in extension)
   return (
     <div>
       <div className="bg-white">
