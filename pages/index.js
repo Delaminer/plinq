@@ -20,17 +20,14 @@ export const TemplateType = {
 };
 
 // A list of colors that can be used for tags. This defines the background color and text color
-export const TagColors = [
-  'purple-3',
-  'orange',
-  'violet',
-  'blue',
-];
+export const TagColors = ["purple-3", "orange", "violet", "blue"];
 
 // Call this function to create a new TemplateType given the name of the type
 export const AddTemplateType = (name) => {
   let key = name;
-  while (key in TemplateType) { key = `${key}1`; } // Make a unique key
+  while (key in TemplateType) {
+    key = `${key}1`;
+  } // Make a unique key
 
   const color = TagColors[Math.floor(Math.random() * TagColors.length)]; // Get a random color
   const bg = `bg-${color}/20`;
@@ -38,7 +35,7 @@ export const AddTemplateType = (name) => {
 
   TemplateType[key] = { label: key, name, bg, tc };
   return TemplateType[key];
-}
+};
 
 const defaultData = {
   contacts: [
@@ -78,7 +75,7 @@ const defaultData = {
   templates: [
     {
       name: "LinkedIn Connection",
-      type: 'coldEmail',
+      type: "coldEmail",
       subject: "-",
       content:
         "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
@@ -86,7 +83,7 @@ const defaultData = {
     },
     {
       name: "Career Fair follow-up",
-      type: 'followup',
+      type: "followup",
       subject: "Nice meeting you, [Name]!",
       content:
         "Hi [Name],\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
@@ -95,7 +92,7 @@ const defaultData = {
     },
     {
       name: "Informational Interview Re..",
-      type: 'coldEmail',
+      type: "coldEmail",
       subject: "[Your name]—informational interview request",
       content:
         "Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
@@ -216,14 +213,13 @@ export default function Home() {
     }
     setState({ ...state });
   };
-  
+
   // Helper function used in creating a new template
   const addTemplate = (template) => {
     state.templates.push({});
     editTemplate(state.templates.length - 1, template);
   };
 
-<<<<<<< HEAD
   const editTemplate = (index, template) => {
     state.templates[index] = template;
     setState({ ...state });
@@ -236,8 +232,6 @@ export default function Home() {
     setState({ ...state });
   };
 
-=======
->>>>>>> e5d353f (Fix font size in extension)
   return (
     <div>
       <div className="bg-white">
