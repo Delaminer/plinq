@@ -20,7 +20,6 @@ export const Copyable = ({ element, valueToCopy }) => (
 export default function TemplateEditor({
   template,
   close,
-  onSubmit,
   editTemplate,
   deleteTemplate,
 }) {
@@ -39,6 +38,7 @@ export default function TemplateEditor({
                 <input
                   {...register("name")}
                   className="border border-black rounded-lg p-1 font-bold text-2xl"
+                  placeholder="Template Title"
                 />
               </div>
             ) : (
@@ -70,6 +70,7 @@ export default function TemplateEditor({
           <input
             {...register("subject")}
             className="border border-black rounded-lg p-1"
+            placeholder="Email subject"
           />
         ) : (
           <Copyable
@@ -92,6 +93,7 @@ export default function TemplateEditor({
             <textarea
               {...register("content")}
               className="border border-black rounded-lg p-1 w-full h-96"
+              placeholder="Content"
             />
           ) : (
             <Copyable

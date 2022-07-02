@@ -20,6 +20,8 @@ module.exports = {
         "purple-7": "#523CF5",
         orange: "#F66854",
         red: "#F2280C",
+        violet: "#B954F6",
+        blue: "#5491F6",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif", ...defaultTheme.fontFamily.sans],
