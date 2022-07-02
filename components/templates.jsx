@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import TemplateEditor from "./templateEditor";
+import TemplateForm from "./templateForm";
+import { TemplateType } from "../pages";
 
 export const TypeIcon = ({ type }) => (
   <p
@@ -10,7 +12,8 @@ export const TypeIcon = ({ type }) => (
   </p>
 );
 
-export default function Templates({ templates, editTemplate, deleteTemplate }) {
+export default function Templates({ templates, editTemplate, deleteTemplate, addTemplate }) {
+  const [showForm, setShowForm] = useState(false);
   const [currentTemplate, selectTemplate] = useState(-1);
 
   return (
@@ -33,7 +36,10 @@ export default function Templates({ templates, editTemplate, deleteTemplate }) {
         <div className="flex items-center justify-center ml-auto h-12">
           {templates.length} templates
         </div>
-        <button className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm">
+        <button
+          className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm"
+          onClick={() => setShowForm(true)}
+        >
           New
         </button>
       </div>
@@ -49,7 +55,7 @@ export default function Templates({ templates, editTemplate, deleteTemplate }) {
               size={25}
             />
             <p className="font-bold">{template.name}</p>
-            {template.type && <TypeIcon type={template.type} />}
+            {template.type && <TypeIcon type={TemplateType[template.type]} />}
             <p className="font-bold">{template.subject}</p>
             <p>{template.content}</p>
           </div>
@@ -63,6 +69,13 @@ export default function Templates({ templates, editTemplate, deleteTemplate }) {
           deleteTemplate={() => deleteTemplate(currentTemplate)}
         />
       )}
+      {showForm && <TemplateForm close={() => setShowForm(false)} 
+          onSubmit={template => {
+            // Add the contact
+            addTemplate(template);
+            // Close the form
+            setShowForm(false);
+          }} />}
     </div>
   );
 }
