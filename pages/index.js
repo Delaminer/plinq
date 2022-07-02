@@ -230,7 +230,11 @@ export default function Home() {
             hash={windowHash}
             path="#follow-up"
             element={
-              <Reminders contacts={state.contacts} followup={followup} />
+              <Reminders
+                contacts={state.contacts}
+                followup={followup}
+                templates={state.templates}
+              />
             }
           ></Tab>
           <Tab

@@ -31,7 +31,7 @@ export default function TemplateEditor({
 
   return (
     <div className="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-20 flex items-center justify-center">
-      <div className="inline-block bg-white rounded-2xl shadow-md p-6 w-1/3 max-h-[80%] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-2xl shadow-md p-6 w-1/3 max-h-[80%] overflow-hidden flex flex-col">
         <div className="flex flex-row mb-5">
           <div className="flex flex-col mr-2">
             {editing ? (
