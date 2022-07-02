@@ -44,6 +44,7 @@ export default function FollowupDialog({
         <hr />
         <div className="flex flex-col gap-2">
           <p className="text-xs text-gray-3 font-bold">Choose a template</p>
+<<<<<<< HEAD
           <select
             onChange={(e) => setTemplateIndex(e.target.value)}
             className="w-96 pl-4 rounded-lg border border-gray-3 box-border h-12 text-gray-4"
@@ -51,6 +52,12 @@ export default function FollowupDialog({
             <option value={-1}>None</option>
             {templates.map((template, index) => (
               <option key={template.name} value={index}>
+=======
+          <select className="w-96 pl-4 rounded-lg border border-gray-3 box-border h-12 text-gray-4">
+            <option value="">None</option>
+            {templates.map((template) => (
+              <option key={template.name} value={template.name}>
+>>>>>>> 26a5bd8 (ui for followup dialog to choose templates done)
                 {template.name}
               </option>
             ))}
