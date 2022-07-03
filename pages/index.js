@@ -220,12 +220,6 @@ export default function Home() {
     editTemplate(state.templates.length - 1, template);
   };
 
-  // Helper function used in creating a new template
-  const addTemplate = (template) => {
-    state.templates.push({});
-    editTemplate(state.templates.length - 1, template);
-  };
-
   const editTemplate = (index, template) => {
     state.templates[index] = template;
     setState({ ...state });
