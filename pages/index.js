@@ -154,7 +154,7 @@ export default function Home() {
     state.contacts[index] = {
       ...contact,
       lastContact: last.toString(),
-      contactInterval: 14,
+      contactInterval: contact.contactInterval || 14,
     };
     setState({ ...state });
   };
