@@ -3,22 +3,6 @@ import { BsFillCircleFill } from "react-icons/bs";
 import { calculateNextContact, sortDates, displayDate } from "./tools";
 import FollowupDialog from "./followupDialog";
 
-// Convert an email, subject, and message into a link that generates this draft email
-const emailLink = (email, subject, body) =>
-  `mailto:${email}?subject=${subject
-    .replaceAll("\n", "%0A")
-    .replaceAll(" ", "%20")}&body=${body
-    .replaceAll("\n", "%0A")
-    .replaceAll(" ", "%20")}`;
-
-// Get the link to start a follow up email to a given contact
-const followupLink = (contact) =>
-  emailLink(
-    contact.email,
-    "Hello there!",
-    `How are you, ${contact.firstName}?\nI hope you are doing well.\n\nBest,\nYour Name`
-  );
-
 // Determine if followup is overdue
 const followupOvedue = (contact) => {
   return (
