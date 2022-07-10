@@ -201,12 +201,13 @@ export default function Home() {
       }
     }
     // Extract data from interests as a string
-    if (typeof contact.interests === "string")
+    if (typeof contact.interests === "string") {
       contact.interests = contact.interests.split(",");
-    // Remove excess spaces and delete blank entries
-    contact.interests = contact.interests
-      .map((interest) => interest.trim())
-      .filter((interest) => interest.length > 0);
+      // Remove excess spaces and delete blank entries
+      contact.interests = contact.interests
+        .map((interest) => interest.trim())
+        .filter((interest) => interest.length > 0);
+    }
 
     state.contacts[index] = contact;
     setState({ ...state });
