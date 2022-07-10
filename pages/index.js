@@ -78,7 +78,7 @@ const defaultData = {
       type: "coldEmail",
       subject: "-",
       content:
-        "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
+        "Hi [Name], \n\nMy name is [Your Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
       lastEdited: "February 26, 2022 00:00:00",
     },
     {
@@ -87,15 +87,14 @@ const defaultData = {
       subject: "Nice meeting you, [Name]!",
       content:
         "Hi [Name],\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
-        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
-        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses.",
+        "\n\nI look forward to hearing from you again soon.\n\nSincerely,\n\n[Your Name]",
     },
     {
       name: "Informational Interview Re..",
       type: "coldEmail",
       subject: "[Your name]—informational interview request",
       content:
-        "Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
+        "Hi [Name], \n\nThank you for accepting my connection! My name is [Your name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
     },
   ],
 };
