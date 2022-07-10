@@ -32,9 +32,12 @@ export const displayDate = (date) => `${months[date.getUTCMonth()]} ${date.getUT
 // Display a date object as '2022-01-31'
 export const displayDate2 = (date) => date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1).toString().padStart(2, "0") + "-" + date.getUTCDate().toString().padStart(2, "0");
 
-// Checks if a search query roughly matches a string description of an item.
-// Case-insensitive, token-aware (of queries)
-// Returns a number specifying the closeness of a match, 0 if no match is found.
+/** 
+ * Roughly match a search query against an item. Case-insensitive, token-aware (of queries).
+ * @param {string} query The search query
+ * @param {string} item The full name of the item
+ * @returns {number} The number of query tokens found in the item, 0 if no match found
+ */
 export function searchQueryRoughlyMatch(query, item) {
     if (typeof query !== 'string' || typeof item !== 'string') return 0;
     const queryTokens = query.split(/\s+/).map(i => i.toLowerCase());

@@ -1,54 +1,42 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { FiLink } from "react-icons/fi";
 import ContactEditor from "../components/contactEditor";
 import ContactForm from "../components/contactForm";
 import { searchQueryRoughlyMatch } from "./tools";
+import SearchBar from "./searchBar";
 
 export default function Networks({ contacts, followup, addContact, editContact, deleteContact }) {
 
   const [showForm, setShowForm] = useState(false);
-  const [query, setQuery] = useState('');
   const [currentContact, selectContact] = useState(-1);
-  const [sortMethod, setSortMethod] = useState('');
-  const [filters, setFilters] = useState({});
+  const [filterSortFn, setFilterSortFn] = useState(a => a);
 
-  const sortFunction = useMemo(() => {
-    if (sortMethod === 'name' || sortMethod === '') {
-      return (a, b) => a.lastName.localeCompare(b.lastName);
-    } else if (sortMethod === 'lastContact') {
-      return (a, b) => new Date(a.lastContact).getTime() - new Date(b.lastContact).getTime();
-    }
-  }, [sortMethod]);
-
-  function searchFilter(contacts, query) {
-    return query.trim().length === 0 ? contacts : contacts.filter(ct => searchQueryRoughlyMatch(query, `${ct.firstName} ${ct.lastName} ${ct.job} ${ct.company}`));
-  }
+  const nameComparator = (a, b) => a.lastName.localeCompare(b.lastName);
+  const searching = {
+    sortOptions: [
+      {label: "Name", comparator: nameComparator},
+      {label: "Last Contacted", comparator: (a, b) => new Date(a.lastContact).getTime() - new Date(b.lastContact).getTime()}
+    ],
+    nameExtractor: ct => `${ct.firstName} ${ct.lastName} ${ct.job} ${ct.company}`,
+    filter: {
+      key: 'industry',
+      label: 'Industry',
+      options: [
+        {label: "Tech", value: "tech"},
+        {label: "Finance", value: "finance"}
+      ]
+    },
+    defaultSort: nameComparator,
+    setFunction: setFilterSortFn
+  };
 
   return (
     <div className="networks">
       <div className="flex py-9 items-center flex-wrap gap-2">
         {/* {showForm ? <ContactCard close={() => setShowForm(false)} /> : null} */}
-        <input
-          className="w-72 rounded-lg bg-gray-1 border border-gray-3 placeholder:text-black pl-4 box-border h-12 mr-12"
-          onChange={ev => setQuery(ev.target.value)}
-          value={query}
-          placeholder="Search"
-        />
-        <div className="flex gap-2 flex-wrap">
-          <select className="w-44 bg-gray-1 pl-3 rounded-lg border border-gray-3 h-12"
-              value={sortMethod} onChange={ev => setSortMethod(ev.target.value)}>
-            <option value="">Sort by</option>
-            <option value="name">Name</option>
-            <option value="lastContact">Last Contacted</option>
-          </select>
-          <select className="w-44 bg-gray-1 pl-3 rounded-lg border border-gray-3 h-12">
-            <option value="">Industry</option>
-            <option value="tech">Tech</option>
-            <option value="finance">Finance</option>
-          </select>
-        </div>
+        <SearchBar {...searching} />
         <div className="flex items-center justify-center ml-auto h-12">
           {contacts.length} networks
         <button
@@ -60,7 +48,7 @@ export default function Networks({ contacts, followup, addContact, editContact, 
         </div>
       </div>
       <div className="grid grid-cols-4 gap-5">
-        {searchFilter(contacts, query).sort(sortFunction).map((contact, index) => (
+        {(filterSortFn == undefined ? contacts : filterSortFn(contacts)).map((contact, index) => (
           <div
             key={contact.lastName + contact.firstName}
             className="bg-white rounded-2xl shadow-md p-6 w-96 flex-none"
