@@ -67,7 +67,8 @@ const storage = {
           linkedIn: `https://www.linkedin.com/in/${prof.publicIdentifier}`,
           email: prof.contactInfo.emailAddress,
           phone: prof.contactInfo.phoneNumbers == undefined || prof.contactInfo.phoneNumbers.length == 0 ? undefined : prof.contactInfo.phoneNumbers[0].number,
-          website: prof.contactInfo.websites == undefined || prof.contactInfo.websites.length == 0 ? undefined : prof.contactInfo.websites[0].url
+          website: prof.contactInfo.websites == undefined || prof.contactInfo.websites.length == 0 ? undefined : prof.contactInfo.websites[0].url,
+          image: extractProfilePictureUrl(prof),
         }))
       }, response => {
         if (response.status) {
