@@ -22,7 +22,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
         <div className="flex flex-row">
           <div className="mr-6 my-3">
             <img
-              src="/avatar.png"
+              src={contact.image || "/avatar.png"}
               width="56px"
               height="56px"
               className="rounded-full"
