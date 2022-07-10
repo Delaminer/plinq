@@ -39,7 +39,7 @@ export default function Reminders({ contacts, followup }) {
             <div className="flex flex-row">
               <div className="mr-6 my-3">
                 <img
-                  src="/avatar.png"
+                  src={contact.image || "/avatar.png"}
                   width="56px"
                   height="56px"
                   className="rounded-full"
