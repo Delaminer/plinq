@@ -17,9 +17,13 @@ export default function FollowupDialog({
       window.open(`mailto:${contact.email}`, "_blank");
     } else {
       const template = templates[index];
-      const link = `mailto:${contact.email}?subject=${formatEmailText(
-        template.subject
-      )}&body=${formatEmailText(template.content)}`;
+      const subject = formatEmailText(
+        template.subject.replaceAll("[Name]", contact.firstName)
+      );
+      const body = formatEmailText(
+        template.content.replaceAll("[Name]", contact.firstName)
+      );
+      const link = `mailto:${contact.email}?subject=${subject}&body=${body}`;
       window.open(link, "_blank");
     }
     followup();
