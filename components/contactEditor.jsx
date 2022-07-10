@@ -101,6 +101,16 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                 )
               }
             </div>
+            {!editing && contact.website && 
+              <div className="flex flex-row gap-3 items-center">
+                <FiLink size={20} />
+                  <p key="website">
+                    <a href={contact.website.includes('http') ? contact.website : `https://${contact.website}`} target="_blank">
+                      {contact.website}
+                    </a>
+                  </p>
+              </div>
+            }
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-sm font-bold text-gray-3">Contact</p>
