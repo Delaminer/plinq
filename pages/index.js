@@ -4,18 +4,41 @@ import Templates from "../components/templates";
 import { useEffect, useState } from "react";
 import React from "react";
 
-const TemplateType = {
+export const TemplateType = {
   coldEmail: {
+    label: "Cold Email",
     name: "COLD EMAIL",
     bg: "bg-orange/20",
     tc: "text-orange",
   },
   followup: {
+    label: "Follow-up",
     name: "FOLLOW-UP",
     bg: "bg-purple-3/20",
     tc: "text-purple-3",
   },
 };
+
+// A list of colors that can be used for tags. This defines the background color and text color
+export const TagColors = [
+  'purple-3',
+  'orange',
+  'violet',
+  'blue',
+];
+
+// Call this function to create a new TemplateType given the name of the type
+export const AddTemplateType = (name) => {
+  let key = name;
+  while (key in TemplateType) { key = `${key}1`; } // Make a unique key
+
+  const color = TagColors[Math.floor(Math.random() * TagColors.length)]; // Get a random color
+  const bg = `bg-${color}/20`;
+  const tc = `text-${color}`;
+
+  TemplateType[key] = { label: key, name, bg, tc };
+  return TemplateType[key];
+}
 
 const defaultData = {
   contacts: [
@@ -54,22 +77,25 @@ const defaultData = {
   ],
   templates: [
     {
-      name: "LinkedIn Conection",
-      type: TemplateType.coldEmail,
+      name: "LinkedIn Connection",
+      type: 'coldEmail',
       subject: "-",
       content:
         "Hi [Name], \n\nMy name is [Name] and I'm a student studying [Major] at [University]. I looked at your profile and I got interested in your experience. If you are open to it, ...",
+      lastEdited: "February 26, 2022 00:00:00",
     },
     {
       name: "Career Fair follow-up",
-      type: TemplateType.followup,
+      type: 'followup',
       subject: "Nice meeting you, [Name]!",
       content:
-        "Hi [Name], \n\nThank you for taking the time to talk with me at the [Event] today. I am grateful for the time you spent ...",
+        "Hi [Name],\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
+        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses." +
+        "\n\nThank you for taking the time to talk with me at the [Event name] today. I am grateful for the time you spent reviewing [your materials] and recommending strategies for presenting them.\n\nI especially appreciate your offer to connect me to others in your network. I also added you on LinkedIn. I'll update my portfolio and let you know how it progresses.",
     },
     {
       name: "Informational Interview Re..",
-      type: TemplateType.coldEmail,
+      type: 'coldEmail',
       subject: "[Your name]—informational interview request",
       content:
         "Hi [Name], \n\nThank you for accepting my connection! My name is [Name] and I'm a student studying [Major] at the [University]. I came across the [Role name] position ...",
@@ -81,12 +107,9 @@ const NavItem = ({ hash, to, children }) => {
   const isActive = hash === to;
   return (
     <a
-      className={
-        "text-2xl ml-12" +
-        (isActive
-          ? " font-bold text-purple-4 underline underline-offset-8"
-          : " font-normal")
-      }
+      className={`text-2xl ${
+        isActive ? "text-purple-4 underline underline-offset-8" : ""
+      }`}
       href={to}
     >
       {children}
@@ -109,7 +132,7 @@ export default function Home() {
 
     // Get data from storage
     const getData = async () => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.addEventListener("hashchange", () =>
           setWindowHash(window.location.hash)
         );
@@ -188,20 +211,37 @@ export default function Home() {
   };
 
   const deleteContact = (index) => {
-    if (index > -1) {
+    if (index > -1 && index < state.contacts.length) {
       state.contacts.splice(index, 1);
     }
     setState({ ...state });
   };
+  
+  // Helper function used in creating a new template
+  const addTemplate = (template) => {
+    state.templates.push({});
+    editTemplate(state.templates.length - 1, template);
+  };
 
-  console.log("idnex");
+  const editTemplate = (index, template) => {
+    state.templates[index] = template;
+    setState({ ...state });
+  };
+
+  const deleteTemplate = (index) => {
+    if (index > -1 && index < state.templates.length) {
+      state.templates.splice(index, 1);
+    }
+    setState({ ...state });
+  };
+
   return (
     <div>
-      <div>
-        <div className="pl-24 bg-white">
+      <div className="bg-white">
+        <div className="pl-24">
           <img src="/logo.svg" className="pt-2.5"></img>
         </div>
-        <nav className="p-6 pl-12 bg-white flex w-screen">
+        <nav className="p-6 pl-24 flex flex-wrap gap-8">
           <NavItem hash={windowHash} to="#follow-up">
             Follow-up
           </NavItem>
@@ -214,7 +254,7 @@ export default function Home() {
         </nav>
       </div>
       <main>
-        <div className="pr-24 pl-24 bg-gray-1">
+        <div className="px-24 bg-gray-1">
           <Tab
             hash={windowHash}
             path="#follow-up"
@@ -238,7 +278,14 @@ export default function Home() {
           <Tab
             hash={windowHash}
             path="#templates"
-            element={<Templates templates={state.templates} />}
+            element={
+              <Templates
+                templates={state.templates}
+                editTemplate={editTemplate}
+                deleteTemplate={deleteTemplate}
+                addTemplate={addTemplate}
+              />
+            }
           ></Tab>
         </div>
       </main>

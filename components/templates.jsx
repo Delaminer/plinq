@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CgArrowsExpandRight } from "react-icons/cg";
 import TemplateEditor from "./templateEditor";
+import TemplateForm from "./templateForm";
+import { TemplateType } from "../pages";
 
-const TypeIcon = ({ type }) => (
+export const TypeIcon = ({ type }) => (
   <p
-    className={`${type.bg} ${type.tc} text-sm font-semibold w-fit rounded-2xl px-2`}
+    className={`${type.bg} ${type.tc} inline-block text-sm font-semibold w-fit rounded-2xl px-2`}
   >
     {type.name}
   </p>
 );
 
-export default function Templates({ templates }) {
-  const [currentTemplate, selectTemplate] = useState(null);
+export default function Templates({ templates, editTemplate, deleteTemplate, addTemplate }) {
+  const [showForm, setShowForm] = useState(false);
+  const [currentTemplate, selectTemplate] = useState(-1);
 
   return (
     <div className="templates">
@@ -31,33 +34,48 @@ export default function Templates({ templates }) {
           <option value="finance">Cold Email</option>
         </select>
         <div className="flex items-center justify-center ml-auto h-12">
-          {templates.length} networks
+          {templates.length} templates
         </div>
-        <button className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm">
+        <button
+          className="ml-8 px-4 py-2 bg-purple-4 self-end rounded-lg w-32 text-white h-12 font-semibold text-sm"
+          onClick={() => setShowForm(true)}
+        >
           New
         </button>
       </div>
-      <div className="flex flex-row">
-        {templates.map((template) => (
-          <div key={template.name} className="inline-block w-96 h-50 bg-white ml-0 m-2.5 p-5 rounded-2xl shadow-md">
+      <div className="flex flex-wrap gap-5">
+        {templates.map((template, index) => (
+          <div
+            key={template.name}
+            className="w-96 flex-none h-60 max-h-60 overflow-hidden bg-white p-5 rounded-2xl shadow-md"
+          >
             <CgArrowsExpandRight
               className="cursor-pointer float-right"
-              onClick={() => selectTemplate(template)}
+              onClick={() => selectTemplate(index)}
               size={25}
             />
             <p className="font-bold">{template.name}</p>
-            {template.type && <TypeIcon type={template.type} />}
+            {template.type && <TypeIcon type={TemplateType[template.type]} />}
             <p className="font-bold">{template.subject}</p>
             <p>{template.content}</p>
           </div>
         ))}
       </div>
-      {currentTemplate != null && (
+      {currentTemplate != -1 && (
         <TemplateEditor
-          template={currentTemplate}
-          close={() => selectTemplate(null)}
+          template={templates[currentTemplate]}
+          close={() => selectTemplate(-1)}
+          editTemplate={(template) => editTemplate(currentTemplate, template)}
+          deleteTemplate={() => deleteTemplate(currentTemplate)}
         />
       )}
+      {showForm && <TemplateForm close={() => setShowForm(false)} 
+          onSubmit={template => {
+            // Add the contact
+            addTemplate(template);
+            // Close the form
+            setShowForm(false);
+          }} />}
     </div>
   );
 }

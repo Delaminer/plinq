@@ -63,12 +63,12 @@ export default function Networks({ contacts, followup, addContact, editContact, 
         {searchFilter(contacts, query).sort(sortFunction).map((contact, index) => (
           <div
             key={contact.lastName + contact.firstName}
-            className="inline-block bg-white rounded-2xl shadow-md p-6"
+            className="bg-white rounded-2xl shadow-md p-6 w-96 flex-none"
           >
             <div className="flex flex-row">
               <div className="mr-6 my-3">
                 <img
-                  src="/avatar.png"
+                  src={contact.image || "/avatar.png"}
                   width="56px"
                   height="56px"
                   className="rounded-full"

@@ -41,3 +41,6 @@ export function searchQueryRoughlyMatch(query, item) {
     const itemNormal = item.toLowerCase();
     return queryTokens.reduce((count, token) => itemNormal.includes(token) ? count + 1 : count, 0);
 }
+
+// Display a date object as 'Jan 1, 2022'
+export const displayDate3 = (date) => `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;

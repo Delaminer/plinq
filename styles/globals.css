@@ -4,4 +4,32 @@
 
 body {
   background-color: #f9f9f9;
+  font-family: Inter, sans-serif;
+  font-size: inherit;
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #E1E1E1;
+    border-radius: 100vh;
+    border: 3px none;
+    cursor: pointer;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #C1C1C1;
+    cursor: pointer;
+  }
+  .custom-overflow {
+    white-space: pre-line;
+  }
 }
