@@ -48,7 +48,7 @@ export default function Networks({ contacts, sort, followup, addContact, editCon
             <div className="flex flex-row">
               <div className="mr-6 my-3">
                 <img
-                  src="/avatar.png"
+                  src={contact.image || "/avatar.png"}
                   width="56px"
                   height="56px"
                   className="rounded-full"
