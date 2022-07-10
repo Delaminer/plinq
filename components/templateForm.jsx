@@ -4,21 +4,20 @@ import { useForm } from "react-hook-form";
 import { TemplateType, AddTemplateType } from "../pages";
 
 export default function TemplateForm({ close, onSubmit }) {
-
   const { register, handleSubmit, watch, setValue } = useForm();
 
-  // If "Custom Type" is selected in the Tag/Type dropdown, show a prompt to creact a cutom type 
+  // If "Custom Type" is selected in the Tag/Type dropdown, show a prompt to creact a cutom type
   const customType = watch("type") === "custom-type";
 
   const createCustomType = useCallback(() => {
     // Create a new custom type
-    const type = AddTemplateType(watch('custom-type-name'));
-    setValue('type', type.label);
+    const type = AddTemplateType(watch("custom-type-name"));
+    setValue("type", type.label);
   }, [setValue, watch, AddTemplateType]);
 
   return (
     <div className="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-20 flex items-center justify-center">
-      <div className="inline-block bg-white rounded-2xl shadow-md p-6 w-1/3 max-h-[80%] overflow-hidden flex flex-col">
+      <div className="bg-white rounded-2xl shadow-md p-6 w-1/3 max-h-[80%] overflow-hidden flex flex-col">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-row mb-2">
             <div className="flex flex-col flex-grow">
@@ -36,28 +35,34 @@ export default function TemplateForm({ close, onSubmit }) {
             </div>
           </div>
           <div className="flex flex-row">
-
-          <select
-            className="w-44 p-2 rounded-lg border border-gray-4 box-border"
-            {...register("type")}
-          >
-            <option value="">Tag</option>
-            {Object.entries(TemplateType).map(([key, { label }]) => 
-              <option key={key} value={key}>{label}</option>
+            <select
+              className="w-44 p-2 rounded-lg border border-gray-4 box-border"
+              {...register("type")}
+            >
+              <option value="">Tag</option>
+              {Object.entries(TemplateType).map(([key, { label }]) => (
+                <option key={key} value={key}>
+                  {label}
+                </option>
+              ))}
+              <option value="custom-type">Custom Tag</option>
+            </select>
+            {customType && (
+              <div className="border rounded-lg bg-purple-4 flex items-center pl-2 ml-2 flex-shrink">
+                <input
+                  {...register("custom-type-name")}
+                  type="text"
+                  placeholder="Custom tag name"
+                  className="border-0 bg-purple-4 border-purple-4 w-32 text-white"
+                />
+                <button
+                  onClick={createCustomType}
+                  className="text-white pl-2 pr-2"
+                >
+                  +
+                </button>
+              </div>
             )}
-            <option value="custom-type">Custom Tag</option>
-          </select>
-          {customType && (
-            <div className="border rounded-lg bg-purple-4 flex items-center pl-2 ml-2 flex-shrink">
-              <input
-                {...register("custom-type-name")}
-                type="text"
-                placeholder="Custom tag name"
-                className="border-0 bg-purple-4 border-purple-4 w-32 bg-purple-4 text-white"
-              />
-              <button onClick={createCustomType} className="text-white pl-2 pr-2">+</button>
-            </div>
-          )}
           </div>
 
           <div className="w-full border-t border-gray-300 mb-3 mt-3"></div>
