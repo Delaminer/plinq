@@ -47,11 +47,11 @@ export default function Networks({ contacts, followup, addContact, editContact, 
         </button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {(filterSortFn == undefined ? contacts : filterSortFn(contacts)).map((contact, index) => (
           <div
             key={contact.lastName + contact.firstName}
-            className="bg-white rounded-2xl shadow-md p-6 w-96 flex-none"
+            className="bg-white rounded-2xl shadow-md p-6 w-100 flex-none"
           >
             <div className="flex flex-row">
               <div className="mr-6 my-3">

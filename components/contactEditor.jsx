@@ -85,12 +85,14 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                 )
               }
             </div>
+            {(contact.linkedIn || editing) &&
             <div className="flex flex-row gap-3 items-center">
               <FiLink size={20} />
               {
                 editing ? (
                   <input
                     {...register("linkedIn")}
+                    type="url" placeholder="Link to LinkedIn profile"
                     className="border border-black rounded-lg p-1"
                   />
                 ) : (
@@ -101,7 +103,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                   </p>
                 )
               }
-            </div>
+            </div>}
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-sm font-bold text-gray-3">Contact</p>
@@ -179,7 +181,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
         {(contact.interests.length > 0 || editing) ? (
           <div className="flex flex-row">
             <div className="flex flex-col">
-              <p className="text-sm font-bold text-gray-3">Interest</p>
+              <p className="text-sm font-bold text-gray-3">Interests</p>
               <div className="flex flex-row flex-wrap gap-2 text-sm mt-1">
                 {editing ? (
                     <Controller
