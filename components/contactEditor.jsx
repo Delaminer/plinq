@@ -7,6 +7,7 @@ import { BsFillTrashFill } from "react-icons/bs"
 import { FiLink, FiPlus } from "react-icons/fi";
 import { calculateNextContact, displayDate, displayDate2 } from "./tools"
 import { Controller, useForm } from "react-hook-form";
+import { format } from "date-fns";
 
 export default function ContactEditor({ contact, close, followup, setContact, deleteContact }) {
   // contact.interests and contact.notes have to be defined as arrays
@@ -34,7 +35,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
             </p>
             {
               editing ? (
-                <div>
+                <div class="flex gap-1 items-center">
                   <input
                     {...register("job")}
                     className="border border-black rounded-lg p-1"
@@ -102,7 +103,7 @@ export default function ContactEditor({ contact, close, followup, setContact, de
               }
             </div>
           </div>
-          <div className="flex flex-col gap">
+          <div className="flex flex-col gap-1">
             <p className="text-sm font-bold text-gray-3">Contact</p>
             {
               (contact.lastContact != undefined && contact.contactInterval) ? (
@@ -111,40 +112,45 @@ export default function ContactEditor({ contact, close, followup, setContact, de
                   <div className="flex flex-row gap-3 items-center">
                     <AiOutlineClockCircle size={20} />
                     {
-                      editing ? (
+                      editing ? (<>
+                        Last:
                         <Controller
                           control={control}
                           name="lastContact"
                           render={({ field }) => (
                             <input 
-                            defaultValue={displayDate2(new Date(contact.lastContact))}
-                            type="date" onChange={date => field.onChange(date)} />
+                              className="border border-black rounded-lg"
+                              defaultValue={displayDate2(new Date(contact.lastContact))}
+                              max={format(new Date(), 'yyyy-MM-dd')}
+                              type="date" onChange={date => field.onChange(date)} />
                           )}
                         />
-                      ) : (
+                      </>) : (
                         <p key="last">
                           Last: {displayDate(new Date(contact.lastContact))}
                         </p>
                       )
                     }
                   </div>
+                  {!editing &&
                   <div className="flex flex-row gap-3 items-center">
                     <AiOutlineClockCircle size={20} />
                     <p key="next">
-                      Next: {editing ? "" : displayDate(calculateNextContact(new Date(contact.lastContact), contact.contactInterval))}
+                      Next: {displayDate(calculateNextContact(new Date(contact.lastContact), contact.contactInterval))}
                     </p>
-                  </div>
+                  </div>}
                   <div className="flex flex-row gap-3 items-center">
                     <GiClockwiseRotation size={20} />
                     {
-                      editing ? (
+                      editing ? (<>
+                        Every
                         <input
                           {...register("contactInterval", { valueAsNumber: true })}
-                          className="border border-black rounded-lg p-1"
-                        />
-                      ) : (
+                          className="border border-black rounded-lg p-1 w-16"
+                        /> days
+                      </>) : (
                         <p key="interval">
-                          {contact.contactInterval} days
+                          Every {contact.contactInterval} days
                         </p>
                       )
                     }

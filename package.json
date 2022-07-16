@@ -19,6 +19,7 @@
     "build-ext": "esbuild extension/sidebar.jsx --bundle --outfile=extension/sidebar.js --minify --sourcemap --target=chrome58,firefox57,safari11,edge16"
   },
   "dependencies": {
+    "date-fns": "^2.28.0",
     "next": "latest",
     "prop-types": "^15.8.1",
     "react": "17.0.2",
