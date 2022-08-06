@@ -46,10 +46,28 @@ const defaultData = {
       company: "LINK",
       email: "bob@bobville.com",
       timesContacted: [
-        { time: "January 25, 2022 00:00:00", description: "Emailed about XXX" },
-        { time: "February 25, 2022 00:00:00", description: "Zoom call about XXX" },
+        { time: "January 25, 2022 00:00:00", note: "Emailed about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
       ],
       contactInterval: 11,
+    },
+    {
+      firstName: "Old Bob",
+      lastName: "Smith",
+      job: "Retired Product Designer",
+      company: "LINK",
+      email: "bob@bobville.com",
+      timesContacted: [
+        { time: "January 25, 2022 00:00:00", note: "Emailed about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+      ],
+      // No contactInterval to check no contact interval appears
     },
     {
       firstName: "Alex",
@@ -57,9 +75,7 @@ const defaultData = {
       job: "Product Designer",
       company: "LINK",
       email: "alexson@umich.com",
-      timesContacted: [
-        { time: "March 20, 2022 00:00:00", description: "" }
-      ],
+      timesContacted: [{ time: "March 20, 2022 00:00:00", note: "" }],
       contactInterval: 7,
       website: "mywebsite.com",
       interests: ["Coffee", "Travel"],
@@ -127,6 +143,7 @@ export default function Home() {
   const [state, setState] = useState(defaultData);
   const [windowHash, setWindowHash] = useState("");
   const [savedState, setSavedState] = useState({});
+  const [followupContact, setFollowupContact] = useState(null);
 
   useEffect(() => {
     // Set default window hash
@@ -178,7 +195,9 @@ export default function Home() {
     last.setHours(0, 0, 0, 0);
     state.contacts[index] = {
       ...contact,
-      lastContact: last.toString(),
+      timesContacted: [
+        { time: last.toString(), note: "Initial follow-up"}
+      ],
       contactInterval: contact.contactInterval || 14,
     };
     setState({ ...state });
@@ -207,6 +226,13 @@ export default function Home() {
       contact.interests = contact.interests
         .map((interest) => interest.trim())
         .filter((interest) => interest.length > 0);
+    }
+
+    // Remove blank entries from array type values of a contact
+    for (let key in contact) {
+      if (Array.isArray(contact[key])) {
+        contact[key] = contact[key].filter((entry) => entry.trim() !== "");
+      }
     }
 
     state.contacts[index] = contact;
@@ -272,6 +298,8 @@ export default function Home() {
                 contacts={state.contacts}
                 followup={followup}
                 templates={state.templates}
+                followupContact={followupContact}
+                gotoFollowup={setFollowupContact}
               />
             }
           ></Tab>
@@ -286,6 +314,11 @@ export default function Home() {
                 addContact={addContact}
                 editContact={editContact}
                 deleteContact={deleteContact}
+                gotoFollowup={contact => {
+                  setFollowupContact(contact);
+                  // Go to the followup page
+                  setWindowHash('#follow-up')
+                }}
               />
             }
           ></Tab>
