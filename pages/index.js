@@ -195,10 +195,8 @@ export default function Home() {
     last.setHours(0, 0, 0, 0);
     state.contacts[index] = {
       ...contact,
-      timesContacted: [
-        { time: last.toString(), note: "Initial follow-up"}
-      ],
-      contactInterval: contact.contactInterval || 14,
+      lastContact: last.toString(),
+      contactInterval: 14,
     };
     setState({ ...state });
   };
@@ -228,13 +226,6 @@ export default function Home() {
         .filter((interest) => interest.length > 0);
     }
 
-    // Remove blank entries from array type values of a contact
-    for (let key in contact) {
-      if (Array.isArray(contact[key])) {
-        contact[key] = contact[key].filter((entry) => entry.trim() !== "");
-      }
-    }
-
     state.contacts[index] = contact;
     setState({ ...state });
   };
@@ -244,12 +235,6 @@ export default function Home() {
       state.contacts.splice(index, 1);
     }
     setState({ ...state });
-  };
-
-  // Helper function used in creating a new template
-  const addTemplate = (template) => {
-    state.templates.push({});
-    editTemplate(state.templates.length - 1, template);
   };
 
   // Helper function used in creating a new template
@@ -294,13 +279,7 @@ export default function Home() {
             hash={windowHash}
             path="#follow-up"
             element={
-              <Reminders
-                contacts={state.contacts}
-                followup={followup}
-                templates={state.templates}
-                followupContact={followupContact}
-                gotoFollowup={setFollowupContact}
-              />
+              <Reminders contacts={state.contacts} followup={followup} />
             }
           ></Tab>
           <Tab
