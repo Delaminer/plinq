@@ -33,3 +33,10 @@ export const displayDate = (date) => `${months[date.getUTCMonth()]} ${date.getUT
 export const displayDate2 = (date) => date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1).toString().padStart(2, "0") + "-" + date.getUTCDate().toString().padStart(2, "0");
 // Display a date object as 'Jan 1, 2022'
 export const displayDate3 = (date) => `${months[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+
+// Add a number of days to a given date (used for calculating when to followup)
+export const addDaysToDate = (date, days) => {
+    let newDate = new Date(date.valueOf());
+    newDate.setDate(date.getDate() + days);
+    return newDate;
+}

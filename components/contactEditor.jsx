@@ -3,10 +3,17 @@ import { CgClose } from "react-icons/cg";
 import { MdOutlineEmail } from "react-icons/md";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { GiClockwiseRotation } from "react-icons/gi";
+import { FiArrowUpRight } from "react-icons/fi";
 import { BsFillTrashFill } from "react-icons/bs";
 import { FiLink } from "react-icons/fi";
-import { calculateNextContact, displayDate, displayDate2 } from "./tools";
+import {
+  calculateNextContact,
+  displayDate,
+  displayDate2,
+  addDaysToDate,
+} from "./tools";
 import { Controller, useForm } from "react-hook-form";
+import Timeline from "./timeline";
 
 export default function ContactEditor({
   contact,
@@ -14,6 +21,7 @@ export default function ContactEditor({
   followup,
   setContact,
   deleteContact,
+  gotoFollowup,
 }) {
   // contact.interests and contact.notes have to be defined as arrays
   if (!contact.interests) contact.interests = [];
@@ -105,81 +113,28 @@ export default function ContactEditor({
                 </p>
               )}
             </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-sm font-bold text-gray-3">Contact</p>
-            {contact.lastContact != undefined && contact.contactInterval ? (
-              <>
-                <div className="flex flex-row gap-3 items-center">
-                  <AiOutlineClockCircle size={20} />
-                  {editing ? (
-                    <Controller
-                      control={control}
-                      name="lastContact"
-                      render={({ field }) => (
-                        <input
-                          defaultValue={displayDate2(
-                            new Date(contact.lastContact)
-                          )}
-                          type="date"
-                          onChange={(date) => field.onChange(date)}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <p key="last">
-                      Last: {displayDate(new Date(contact.lastContact))}
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                  <AiOutlineClockCircle size={20} />
-                  <p key="next">
-                    Next:{" "}
-                    {editing
-                      ? ""
-                      : displayDate(
-                          calculateNextContact(
-                            new Date(contact.lastContact),
-                            contact.contactInterval
-                          )
-                        )}
-                  </p>
-                </div>
-                <div className="flex flex-row gap-3 items-center">
-                  <GiClockwiseRotation size={20} />
-                  {editing ? (
-                    <input
-                      {...register("contactInterval", { valueAsNumber: true })}
-                      className="border border-black rounded-lg p-1"
-                    />
-                  ) : (
-                    <p key="interval">{contact.contactInterval} days</p>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-row gap-3 items-center">
-                  <AiOutlineClockCircle size={20} />
-                  <p key="no-contact">Never contacted</p>
-                </div>
-                <button
-                  className="rounded-lg border-black border-2 font-semibold px-2"
-                  onClick={() => followup(contact)}
-                >
-                  Add to Follow-Ups
-                </button>
-              </>
+            {!editing && contact.website && (
+              <div className="flex flex-row gap-3 items-center">
+                <FiLink size={20} />
+                <p key="website">
+                  <a
+                    href={
+                      contact.website.includes("http")
+                        ? contact.website
+                        : `https://${contact.website}`
+                    }
+                    target="_blank"
+                  >
+                    {contact.website}
+                  </a>
+                </p>
+              </div>
             )}
           </div>
-        </div>
-
-        {(contact.interests.length > 0 || editing) && (
-          <div className="flex flex-row">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-bold text-gray-3">Interest</p>
-              <div className="flex flex-row gap-2 mt-2">
+          <div className="gap-1 flex flex-col">
+            {(contact.interests.length > 0 || editing) && (
+              <>
+                <p className="text-sm font-bold text-gray-3">Interest</p>
                 {editing ? (
                   <Controller
                     control={control}
@@ -214,7 +169,7 @@ export default function ContactEditor({
                           </div>
                         ))}
                         <button
-                          className="px-4 border-2 border-purple-4 bg-purple-4 rounded-lg text-white h-12 font-semibold text-base"
+                          className="px-4 border-2 border-purple-4 bg-purple-4 rounded-lg text-white h-12 font-semibold text-base w-min"
                           onClick={() => field.onChange([...field.value, ""])}
                         >
                           New
@@ -223,19 +178,19 @@ export default function ContactEditor({
                     )}
                   />
                 ) : (
-                  contact.interests.map((interest, index) => (
+                  contact.interests.map((interest) => (
                     <div
-                      key={index}
-                      className="bg-gray-4/20 rounded-2xl px-3 py-1 text-gray-4 text-sm font-semibold flex items-center justify-center"
+                      key={interest}
+                      className="inline-block bg-gray-4/20 rounded-2xl mr-1 px-3 py-1 text-gray-4 text-sm font-semibold text-center w-min"
                     >
                       {interest.toUpperCase()}
                     </div>
                   ))
                 )}
-              </div>
-            </div>
+              </>
+            )}
           </div>
-        )}
+        </div>
 
         {(contact.notes.length > 0 || editing) && (
           <div className="flex flex-row">
@@ -272,6 +227,16 @@ export default function ContactEditor({
             </div>
           </div>
         )}
+
+        <div className="mt-2">
+          <p className="text-sm font-bold text-gray-3">Timeline</p>
+          <Timeline
+            times={contact.timesContacted}
+            contactInterval={contact.contactInterval}
+            followup={() => gotoFollowup(contact)}
+            addToFollowups={() => followup(contact)}
+          />
+        </div>
 
         <div className="flex flex-row gap-2 mt-2 float-right">
           {editing ? (

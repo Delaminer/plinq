@@ -45,8 +45,29 @@ const defaultData = {
       job: "Product Designer",
       company: "LINK",
       email: "bob@bobville.com",
-      lastContact: "February 26, 2022 00:00:00",
-      contactInterval: 14,
+      timesContacted: [
+        { time: "January 25, 2022 00:00:00", note: "Emailed about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+      ],
+      contactInterval: 11,
+    },
+    {
+      firstName: "Old Bob",
+      lastName: "Smith",
+      job: "Retired Product Designer",
+      company: "LINK",
+      email: "bob@bobville.com",
+      timesContacted: [
+        { time: "January 25, 2022 00:00:00", note: "Emailed about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+        { time: "February 25, 2022 00:00:00", note: "Zoom call about XXX" },
+      ],
+      // No contactInterval to check no contact interval appears
     },
     {
       firstName: "Alex",
@@ -54,10 +75,11 @@ const defaultData = {
       job: "Product Designer",
       company: "LINK",
       email: "alexson@umich.com",
-      lastContact: "March 20, 2022 00:00:00",
+      timesContacted: [{ time: "March 20, 2022 00:00:00", note: "" }],
       contactInterval: 7,
       website: "mywebsite.com",
       interests: ["Coffee", "Travel"],
+      industry: ["B2B", "Health"],
       notes: [
         "Has been working on B2B products for 7 years.",
         "Previously at Cisco and Logitech as a Service Designer.",
@@ -121,6 +143,7 @@ export default function Home() {
   const [state, setState] = useState(defaultData);
   const [windowHash, setWindowHash] = useState("");
   const [savedState, setSavedState] = useState({});
+  const [followupContact, setFollowupContact] = useState(null);
 
   useEffect(() => {
     // Set default window hash
@@ -173,7 +196,7 @@ export default function Home() {
     state.contacts[index] = {
       ...contact,
       lastContact: last.toString(),
-      contactInterval: contact.contactInterval || 14,
+      contactInterval: 14,
     };
     setState({ ...state });
   };
@@ -256,11 +279,7 @@ export default function Home() {
             hash={windowHash}
             path="#follow-up"
             element={
-              <Reminders
-                contacts={state.contacts}
-                followup={followup}
-                templates={state.templates}
-              />
+              <Reminders contacts={state.contacts} followup={followup} />
             }
           ></Tab>
           <Tab
@@ -274,6 +293,11 @@ export default function Home() {
                 addContact={addContact}
                 editContact={editContact}
                 deleteContact={deleteContact}
+                gotoFollowup={contact => {
+                  setFollowupContact(contact);
+                  // Go to the followup page
+                  setWindowHash('#follow-up')
+                }}
               />
             }
           ></Tab>

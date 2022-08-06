@@ -5,7 +5,7 @@ import { FiLink } from "react-icons/fi";
 import ContactEditor from "../components/contactEditor";
 import ContactForm from "../components/contactForm";
 
-export default function Networks({ contacts, sort, followup, addContact, editContact, deleteContact }) {
+export default function Networks({ contacts, sort, followup, gotoFollowup, addContact, editContact, deleteContact }) {
 
   const [showForm, setShowForm] = useState(false);
   const [currentContact, selectContact] = useState(-1);
@@ -105,6 +105,7 @@ export default function Networks({ contacts, sort, followup, addContact, editCon
           contact={contacts[currentContact]}
           close={() => selectContact(-1)}
           followup={followup}
+          gotoFollowup={gotoFollowup}
           setContact={contact => editContact(currentContact, contact)}
           deleteContact={() => deleteContact(currentContact)}
         />
